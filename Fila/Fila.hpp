@@ -61,12 +61,10 @@ T Fila<T>::ultimo() {
 
 template <typename T>
 int Fila<T>::getUltimo() {
-	int size = abs(fim-inicio);
-
-	if(size == 0)
+	if(filaVazia())
 		throw std::runtime_error("fila vazia");
 	else
-		return size-1;
+		return abs(fim-inicio)-1;
 }
 
 template <typename T>
