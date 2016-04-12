@@ -59,6 +59,10 @@ void Lista<T>::adicionaNaPosicao(T dado, int posicao) {
 	if (listaCheia())
 		throw std::runtime_error("lista cheia");
 
+	if (posicao > ultimo+1 || posicao < 0)
+		throw std::runtime_error("posicao must be smaller than "
+								"ultimo+1 and greater than zero");
+
 	ultimo++;
 
 	for (int i = ultimo; i > posicao; --i) {
@@ -97,8 +101,9 @@ T Lista<T>::retiraDaPosicao(int posicao) {
 	if (listaVazia())
 		throw std::runtime_error("lista vazia");
 
-	if (posicao >= tamanho || posicao < 0)
-		throw std::invalid_argument("posicao must be smaller than tamanho and greater than zero");
+	if (posicao >= ultimo+1 || posicao < 0)
+		throw std::runtime_error("posicao must be smaller than "
+								"ultimo+1 and greater than zero");
 
 	T removido = dados[posicao];
 
@@ -109,8 +114,6 @@ T Lista<T>::retiraDaPosicao(int posicao) {
 	ultimo--;
 
 	return removido;
-
-
 }
 
 template<typename T>
@@ -138,7 +141,6 @@ bool Lista<T>::contem(T dado) {
 	}
 
 	return true;
-
 }
 
 template<typename T>
