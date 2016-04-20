@@ -1,20 +1,22 @@
 #ifndef ELEMENTO_HPP
 #define ELEMENTO_HPP
 
+#include <memory>
+
 template<typename T>
 class Elemento {
 private:
 	T *info;
-	Elemento<T>* _next;
+	std::shared_ptr<Elemento<T>> _next;
 
 public:
-	Elemento(const T& info, Elemento<T>* next) : info(new T(info)), _next(next) {}
+	Elemento(const T& _info, std::shared_ptr<Elemento<T>> next) : info(new T(_info)), _next(next) {}
 
 	~Elemento() {
 		delete info;
 	}
 
-	Elemento<T>* getProximo() const {
+	std::shared_ptr<Elemento<T>> getProximo() const {
 		return _next;
 	}
 
@@ -22,7 +24,7 @@ public:
 		return *info;
 	}
 
-	void setProximo(Elemento<T>* next) {
+	void setProximo(std::shared_ptr<Elemento<T>> next) {
 		_next = next;
 	}
 };
