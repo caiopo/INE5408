@@ -1,3 +1,5 @@
+// Copyright 2016 Caio Pereira Oliveira
+
 #ifndef ELEMENTO_HPP
 #define ELEMENTO_HPP
 
@@ -5,12 +7,13 @@
 
 template<typename T>
 class Elemento {
-private:
+ private:
 	T *info;
 	std::shared_ptr<Elemento<T>> _next;
 
-public:
-	Elemento(const T& _info, std::shared_ptr<Elemento<T>> next) : info(new T(_info)), _next(next) {}
+ public:
+	Elemento(const T& _info, std::shared_ptr<Elemento<T>> next)
+	        : info(new T(_info)), _next(next) {}
 
 	~Elemento() {
 		delete info;
