@@ -171,7 +171,7 @@ class ListaEnc {
 	 * @return     O dado retirado
 	 */
 	T retiraDaPosicao(int pos) {
-		if(pos > size || pos < 0)
+		if(pos >= size || pos < 0)
 			throw std::runtime_error("posicao must be smaller than "
 									"ultimo+1 and greater than zero");
 
