@@ -1,3 +1,5 @@
+// Copyright 2016 Caio Pereira Oliveira
+
 #ifndef FILAENC_HPP
 #define FILAENC_HPP
 
@@ -9,8 +11,8 @@
 template <typename T>
 class FilaEnc {
  private:
-	std::shared_ptr<Elemento<T>> tail = nullptr;
-	std::shared_ptr<Elemento<T>> head = nullptr;
+	std::shared_ptr<Elemento<T>> tail;
+	std::shared_ptr<Elemento<T>> head;
 
  public:
 	FilaEnc() = default;
@@ -38,7 +40,6 @@ class FilaEnc {
 		head = head->getProximo();
 
 		return retirado;
-
 	}
 
 	T ultimo() {
