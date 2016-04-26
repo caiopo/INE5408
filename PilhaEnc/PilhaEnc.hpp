@@ -21,6 +21,9 @@ class PilhaEnc {
 										// primeiro elemento da pilha
 
  public:
+ 	/**
+	 * @brief      Construtor da pilha. Inicia a pilha vazia
+	 */
 	PilhaEnc() = default;
 
 	/**
