@@ -7,10 +7,11 @@
 class Pista {
 private:
 	FilaEnc<Carro> fila;
-	int size = 0;
+	int tamanho = 0, velocidade = 0;
+	int frequenciaFixa = 0, frequenciaVariavel = 0;
 
 public:
-	explicit Pista(int tam);
+	Pista(int tam, int vel, int fFixa, int fVar);
 	void adiciona(Carro c);
 	Carro retira();
 	bool estaVazia();

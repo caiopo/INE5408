@@ -1,13 +1,15 @@
 #include "Pista.hpp"
 #include "Exceptions.hpp"
 
-Pista::Pista(int tam) : size(tam) {}
+Pista::Pista(int tam, int vel, int fFixa, int fVar):
+	tamanho(tamanho), velocidade(vel),
+	frenquenciaFixa(fFixa), frenquenciaVariavel(fVar) {}
 
-void Pista::adiciona(Carro c) {
-	if (c.getSize() > size)
+void Pista::adiciona(Carrotamanho c) {
+	if (c.getSize() > tamanho)
 		throw ErroPistaCheia();
 
-	size -= c.getSize();
+	tamanho -= c.getSize();
 
 	fila.inclui(c);
 }
@@ -15,7 +17,7 @@ void Pista::adiciona(Carro c) {
 Carro Pista::retira() {
 	auto c = fila.retira();
 
-	size += c.getSize();
+	tamanho += c.getSize();
 
 	return c;
 }

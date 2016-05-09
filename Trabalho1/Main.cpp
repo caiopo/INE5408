@@ -1,8 +1,11 @@
 #include "Pista.hpp"
-#include <iostream>
+#include <cstdio>
+#include <ctime>
 
+ListaOrdenada eventos;
 
 int main() {
-	Carro p(10);
-	std::cout << p.getSize() << std::endl;
+	srand(time(NULL));
+
+
 }
