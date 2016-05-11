@@ -7,6 +7,7 @@ Copyright [2014] <Jean Martina>
 #include "ListaDuplaCirc.hpp"
 #define tam 10
 #define offset 1000
+#include <cstdio>
 
 int main(int argc, char* argv[]) {
 	::testing::InitGoogleTest(&argc, argv);
