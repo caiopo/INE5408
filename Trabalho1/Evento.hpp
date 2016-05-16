@@ -12,10 +12,9 @@ private:
 
 public:
 	explicit Evento(int t) : tempo(t) {}
-	~Evento() {}
+	virtual~Evento() {}
 
 	int getTempo();
-	virtual void calcula();
 
 	bool operator >(const Evento& e) const;
 	bool operator <(const Evento& e) const;
@@ -23,43 +22,43 @@ public:
 	bool operator >=(const Evento& e) const;
 	bool operator <=(const Evento& e) const;
 
+	bool operator >(int i) const;
+	bool operator <(int i) const;
+	bool operator ==(int i) const;
+	bool operator >=(int i) const;
+	bool operator <=(int i) const;
+
 };
 
 class EventoCriarCarro : public Evento {
 private:
-	std::shared_ptr<Pista> pista;
+	Pista& pista;
 
 public:
 	EventoCriarCarro(int t, Pista& p);
-	~EventoCriarCarro() {}
 };
 
 class EventoRemoverCarro : public Evento {
 private:
-	std::shared_ptr<Carro> carro;
-	std::shared_ptr<Pista> pista;
+	Pista& pista;
 
 public:
-	EventoRemoverCarro(int t, Carro& c, Pista& p);
-	~EventoRemoverCarro() {}
+	EventoRemoverCarro(int t, Pista& p);
 };
 
 class EventoChegouNoSemaforo : public Evento {
 private:
-	std::shared_ptr<Carro> carro;
-	std::shared_ptr<Semaforo> semaforo;
-	std::shared_ptr<Pista> pista;
+	Semaforo& semaforo;
+	Pista& pista;
 public:
-	EventoChegouNoSemaforo(int t, Carro& c, Semaforo& s);
-	~EventoChegouNoSemaforo() {}
+	EventoChegouNoSemaforo(int t, Semaforo& s, Pista& p);
 };
 
 class EventoAbrirSemaforo : public Evento {
 private:
-	std::shared_ptr<Semaforo> semaforo;
+	Semaforo& semaforo;
 public:
 	EventoAbrirSemaforo(int t, Semaforo& s);
-	~EventoAbrirSemaforo() {}
 };
 
 

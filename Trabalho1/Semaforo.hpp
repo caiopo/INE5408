@@ -1,5 +1,6 @@
 #ifndef SEMAFORO_HPP
 #define SEMAFORO_HPP
+#include <iostream>
 
 enum class Direcao {
 	NORTE,
@@ -13,6 +14,8 @@ enum class NumSemaforo {
 	S2
 };
 
+std::ostream& operator<<(std::ostream& out, Direcao d);
+
 class Semaforo {
 private:
 	Direcao direcao = Direcao::NORTE;
@@ -21,7 +24,7 @@ private:
 public:
 	explicit Semaforo(NumSemaforo n);
 	void proximoEstado();
-	Direcao decidePista(Direcao d);
+	Direcao decideDirecao(Direcao d) const;
 	bool estaAberto();
 	Direcao direcaoAtual();
 };

@@ -26,14 +26,34 @@ bool Evento::operator <=(const Evento& e) const {
 	return tempo <= e.tempo;
 }
 
+bool Evento::operator >(int i) const {
+	return tempo > i;
+}
+
+bool Evento::operator <(int i) const {
+	return tempo < i;
+}
+
+bool Evento::operator ==(int i) const {
+	return tempo == i;
+}
+
+bool Evento::operator >=(int i) const {
+	return tempo >= i;
+}
+
+bool Evento::operator <=(int i) const {
+	return tempo <= i;
+}
+
 EventoCriarCarro::EventoCriarCarro(int t, Pista& p) :
-	Evento(t), pista(std::make_shared<Pista>(p)) {}
+	Evento(t), pista(p) {}
 
-EventoRemoverCarro::EventoRemoverCarro(int t, Carro& c, Pista& p) :
-	Evento(t), carro(std::make_shared<Carro>(c)), pista(std::make_shared<Pista>(p)) {}
+EventoRemoverCarro::EventoRemoverCarro(int t, Pista& p) :
+	Evento(t), pista(p) {}
 
-EventoChegouNoSemaforo::EventoChegouNoSemaforo(int t, Carro& c, Semaforo& s) :
-	Evento(t), carro(std::make_shared<Carro>(c)), semaforo(std::make_shared<Semaforo>(s)) {}
+EventoChegouNoSemaforo::EventoChegouNoSemaforo(int t, Semaforo& s, Pista& p) :
+	Evento(t), semaforo(s), pista(p) {}
 
 EventoAbrirSemaforo::EventoAbrirSemaforo(int t, Semaforo& s) :
-	Evento(t), semaforo(std::make_shared<Semaforo>(s)) {}
+	Evento(t), semaforo(s) {}

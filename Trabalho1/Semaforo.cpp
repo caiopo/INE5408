@@ -1,20 +1,104 @@
-#include <cstdlib>
-#include <stdexcept>
 #include "Semaforo.hpp"
-
+#include <stdexcept>
+#include <cstdlib>
+#include <iostream>
 
 namespace {
-	Direcao random(Direcao atual, int prob0, int prob1, int prob2) {
+	Direcao getDireita(Direcao d) {
+		switch (d) {
+		case Direcao::NORTE:
+			return Direcao::OESTE;
+
+		case Direcao::SUL:
+			return Direcao::LESTE;
+
+		case Direcao::OESTE:
+			return Direcao::SUL;
+
+		case Direcao::LESTE:
+			return Direcao::NORTE;
+
+		default:
+			throw std::logic_error("direcao não encontrada");
+		}
+
+		return Direcao::NORTE;
+	}
+
+	Direcao getReto(Direcao d) {
+		switch (d) {
+		case Direcao::NORTE:
+			return Direcao::SUL;
+
+		case Direcao::SUL:
+			return Direcao::NORTE;
+
+		case Direcao::OESTE:
+			return Direcao::LESTE;
+
+		case Direcao::LESTE:
+			return Direcao::OESTE;
+
+		default:
+			throw std::logic_error("direcao não encontrada");
+		}
+
+		return Direcao::NORTE;
+	}
+
+	Direcao getEsquerda(Direcao d) {
+		switch (d) {
+		case Direcao::NORTE:
+			return Direcao::LESTE;
+
+		case Direcao::SUL:
+			return Direcao::OESTE;
+
+		case Direcao::OESTE:
+			return Direcao::NORTE;
+
+		case Direcao::LESTE:
+			return Direcao::SUL;
+
+		default:
+			throw std::logic_error("direcao não encontrada");
+		}
+
+		return Direcao::NORTE;
+	}
+
+	Direcao random(Direcao atual, int probEsq, int probReto, int probDir) {
 		int r = rand() % 100;
 
-		if (r < prob0)
-			return 0;
-		else if (r < (prob0+prob1))
-			return 1;
+		if (r < probEsq)
+			return getEsquerda(atual);
+		else if (r < (probEsq+probReto))
+			return getReto(atual);
 		else
-			return 2;
-
+			return getDireita(atual);
 	}
+}
+
+std::ostream& operator<<(std::ostream& out, Direcao d){
+	switch(d) {
+	case Direcao::NORTE:
+		out << "NORTE";
+		break;
+
+	case Direcao::LESTE:
+		out << "LESTE";
+		break;
+
+	case Direcao::SUL:
+		out << "SUL";
+		break;
+
+	case Direcao::OESTE:
+		out << "OESTE";
+		break;
+	}
+
+	return out;
 }
 
 Semaforo::Semaforo(NumSemaforo n) : num(n) {}
@@ -36,39 +120,40 @@ void Semaforo::proximoEstado() {
 	}
 }
 
-Direcao Semaforo::decidePista(Direcao d) {
-	if (num == NumSemaforo::S1)
-		switch (direcao) {
+Direcao Semaforo::decideDirecao(Direcao d) const {
+	if (num == NumSemaforo::S1) {
+		switch (d) {
 			case Direcao::NORTE:
+				return random(Direcao::NORTE, 80, 10, 10);
 
-				break;
 			case Direcao::LESTE:
+				return random(Direcao::LESTE, 10, 80, 10);
 
-				break;
 			case Direcao::SUL:
+				return random(Direcao::SUL, 10, 10, 80);
 
-				break;
 			case Direcao::OESTE:
+				return random(Direcao::OESTE, 30, 40, 30);
 
-				break;
 			default:
-				throw std::runtime_error("direcao != {NORTE|SUL|LESTE|OESTE}")
+				throw std::runtime_error("direcao != {NORTE|SUL|LESTE|OESTE}");
 		}
-	else
-		switch (direcao) {
+	} else {
+		switch (d) {
 			case Direcao::NORTE:
+				return random(Direcao::NORTE, 30, 40, 30);
 
-				break;
 			case Direcao::LESTE:
+				return random(Direcao::LESTE, 40, 30, 30);
 
-				break;
 			case Direcao::SUL:
+				return random(Direcao::SUL, 30, 30, 40);
 
-				break;
 			case Direcao::OESTE:
+				return random(Direcao::OESTE, 30, 30, 40);
 
-				break;
 			default:
-				throw std::runtime_error("direcao != {NORTE|SUL|LESTE|OESTE}")
+				throw std::runtime_error("direcao != {NORTE|SUL|LESTE|OESTE}");
 		}
+	}
 }
