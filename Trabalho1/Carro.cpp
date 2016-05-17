@@ -1,6 +1,8 @@
 #include "Carro.hpp"
+#include "cstdlib"
 
-Carro::Carro(int tam) : size(tam) {}
+Carro::Carro():
+	size(TAM_FIXO + TAM_VAR * rand() / RAND_MAX) {}
 
 int Carro::getSize() {
 	return size;

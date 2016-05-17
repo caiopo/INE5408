@@ -16,6 +16,13 @@ enum class NumSemaforo {
 
 std::ostream& operator<<(std::ostream& out, Direcao d);
 
+
+namespace DirecaoFunc {
+	Direcao getDireita(Direcao d);
+	Direcao getReto(Direcao d);
+	Direcao getEsquerda(Direcao d);
+}
+
 class Semaforo {
 private:
 	Direcao direcao = Direcao::NORTE;

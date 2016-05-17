@@ -4,8 +4,9 @@
 class Carro {
 private:
 	int size = 0;
+	const int TAM_FIXO = 5, TAM_VAR = 4;
 public:
-	explicit Carro(int tam);
+	Carro();
 	int getSize();
 };
 

@@ -4,27 +4,31 @@
 #include "Carro.hpp"
 #include "Semaforo.hpp"
 #include "Pista.hpp"
-#include <memory>
+#include <vector>
 
 class Evento {
 private:
 	int tempo = 0;
 
 public:
-	explicit Evento(int t) : tempo(t) {}
-	virtual~Evento() {}
+	explicit Evento(int t);
+	virtual ~Evento() {}
+
+	virtual std::vector<Evento> run();
 
 	int getTempo();
 
 	bool operator >(const Evento& e) const;
 	bool operator <(const Evento& e) const;
 	bool operator ==(const Evento& e) const;
+	bool operator !=(const Evento& e) const;
 	bool operator >=(const Evento& e) const;
 	bool operator <=(const Evento& e) const;
 
 	bool operator >(int i) const;
 	bool operator <(int i) const;
 	bool operator ==(int i) const;
+	bool operator !=(int i) const;
 	bool operator >=(int i) const;
 	bool operator <=(int i) const;
 
@@ -32,18 +36,18 @@ public:
 
 class EventoCriarCarro : public Evento {
 private:
-	Pista& pista;
-
+	Fonte& fonte;
 public:
-	EventoCriarCarro(int t, Pista& p);
+	EventoCriarCarro(int t, Fonte& f);
+	virtual std::vector<Evento> run();
 };
 
 class EventoRemoverCarro : public Evento {
 private:
-	Pista& pista;
-
+	Sumidouro& sumidouro;
 public:
-	EventoRemoverCarro(int t, Pista& p);
+	EventoRemoverCarro(int t, Sumidouro& s);
+	virtual std::vector<Evento> run();
 };
 
 class EventoChegouNoSemaforo : public Evento {
@@ -52,6 +56,7 @@ private:
 	Pista& pista;
 public:
 	EventoChegouNoSemaforo(int t, Semaforo& s, Pista& p);
+	virtual std::vector<Evento> run();
 };
 
 class EventoAbrirSemaforo : public Evento {
@@ -59,7 +64,7 @@ private:
 	Semaforo& semaforo;
 public:
 	EventoAbrirSemaforo(int t, Semaforo& s);
+	virtual std::vector<Evento> run();
 };
-
 
 #endif  // EVENTO_HPP

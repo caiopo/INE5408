@@ -3,79 +3,82 @@
 #include <cstdlib>
 #include <iostream>
 
+Direcao DirecaoFunc::getDireita(Direcao d) {
+	switch (d) {
+	case Direcao::NORTE:
+		return Direcao::OESTE;
+
+	case Direcao::SUL:
+		return Direcao::LESTE;
+
+	case Direcao::OESTE:
+		return Direcao::SUL;
+
+	case Direcao::LESTE:
+		return Direcao::NORTE;
+
+	default:
+		throw std::logic_error("direcao não encontrada");
+	}
+
+	return Direcao::NORTE;
+}
+
+Direcao DirecaoFunc::getReto(Direcao d) {
+	switch (d) {
+	case Direcao::NORTE:
+		return Direcao::SUL;
+
+	case Direcao::SUL:
+		return Direcao::NORTE;
+
+	case Direcao::OESTE:
+		return Direcao::LESTE;
+
+	case Direcao::LESTE:
+		return Direcao::OESTE;
+
+	default:
+		throw std::logic_error("direcao não encontrada");
+	}
+
+	return Direcao::NORTE;
+}
+
+Direcao DirecaoFunc::getEsquerda(Direcao d) {
+	switch (d) {
+	case Direcao::NORTE:
+		return Direcao::LESTE;
+
+	case Direcao::SUL:
+		return Direcao::OESTE;
+
+	case Direcao::OESTE:
+		return Direcao::NORTE;
+
+	case Direcao::LESTE:
+		return Direcao::SUL;
+
+	default:
+		throw std::logic_error("direcao não encontrada");
+	}
+
+	return Direcao::NORTE;
+}
+
 namespace {
-	Direcao getDireita(Direcao d) {
-		switch (d) {
-		case Direcao::NORTE:
-			return Direcao::OESTE;
-
-		case Direcao::SUL:
-			return Direcao::LESTE;
-
-		case Direcao::OESTE:
-			return Direcao::SUL;
-
-		case Direcao::LESTE:
-			return Direcao::NORTE;
-
-		default:
-			throw std::logic_error("direcao não encontrada");
-		}
-
-		return Direcao::NORTE;
-	}
-
-	Direcao getReto(Direcao d) {
-		switch (d) {
-		case Direcao::NORTE:
-			return Direcao::SUL;
-
-		case Direcao::SUL:
-			return Direcao::NORTE;
-
-		case Direcao::OESTE:
-			return Direcao::LESTE;
-
-		case Direcao::LESTE:
-			return Direcao::OESTE;
-
-		default:
-			throw std::logic_error("direcao não encontrada");
-		}
-
-		return Direcao::NORTE;
-	}
-
-	Direcao getEsquerda(Direcao d) {
-		switch (d) {
-		case Direcao::NORTE:
-			return Direcao::LESTE;
-
-		case Direcao::SUL:
-			return Direcao::OESTE;
-
-		case Direcao::OESTE:
-			return Direcao::NORTE;
-
-		case Direcao::LESTE:
-			return Direcao::SUL;
-
-		default:
-			throw std::logic_error("direcao não encontrada");
-		}
-
-		return Direcao::NORTE;
-	}
-
 	Direcao random(Direcao atual, int probEsq, int probReto, int probDir) {
+		if (probEsq+probReto+probDir != 100)
+			throw std::logic_error("");
+
 		int r = rand() % 100;
 
 		if (r < probEsq)
-			return getEsquerda(atual);
+			return DirecaoFunc::getEsquerda(atual);
 		else if (r < (probEsq+probReto))
-			return getReto(atual);
+			return DirecaoFunc::getReto(atual);
 		else
-			return getDireita(atual);
+			return DirecaoFunc::getDireita(atual);
 	}
 }
 
@@ -156,4 +159,8 @@ Direcao Semaforo::decideDirecao(Direcao d) const {
 				throw std::runtime_error("direcao != {NORTE|SUL|LESTE|OESTE}");
 		}
 	}
+}
+
+Direcao Semaforo::direcaoAtual() {
+	return direcao;
 }
