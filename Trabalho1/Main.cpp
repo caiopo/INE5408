@@ -54,6 +54,11 @@ int main(int argc, char const *argv[]) {
 		exit(1);
 	}
 
+	std::cout << eventos.estaVazia() << std::endl;
+
+	eventos.adiciona(EventoCriarCarro(0, N1sul));
+
+	std::cout << eventos.estaVazia() << std::endl;
 
 	int tempoAtual = 0;
 
@@ -61,8 +66,11 @@ int main(int argc, char const *argv[]) {
 		Evento eventoAtual = eventos.retira();
 		tempoAtual = eventoAtual.getTempo();
 
+		auto vec = eventoAtual.run();
 
-
+		for (std::vector<Evento>::iterator i = vec.begin(); i != vec.end(); ++i) {
+			eventos.adiciona(*i);
+		}
 
 	}
 

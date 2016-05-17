@@ -1,5 +1,6 @@
 #include "Pista.hpp"
 #include "Exceptions.hpp"
+#include <cstdlib>
 
 Pista::Pista(Direcao d, int tam, int vel):
 	direcao(d),
@@ -29,6 +30,10 @@ bool Pista::estaVazia() {
 
 bool Pista::moveCarro(Semaforo&) {
 	throw std::logic_error("Pista::moveCarro not implemented");
+}
+
+int Pista::tempoParaPercorrer() {
+	return tamanho / velocidade / 3.6;
 }
 
 PistaCentro::PistaCentro(Direcao d, int tam, int vel,
@@ -90,6 +95,10 @@ bool Fonte::moveCarro(Semaforo& semaforo) {
 		throw std::logic_error("error in Fonte::moveCarro");
 
 	return true;
+}
+
+int Fonte::tempoProximoEvento(int tempo) {
+	return tempo+frequenciaFixa+frequenciaVariavel*rand()/RAND_MAX;
 }
 
 Sumidouro::Sumidouro(Direcao d, int tam, int vel):

@@ -62,8 +62,9 @@ public:
 class EventoAbrirSemaforo : public Evento {
 private:
 	Semaforo& semaforo;
+	int frequencia;
 public:
-	EventoAbrirSemaforo(int t, Semaforo& s);
+	EventoAbrirSemaforo(int t, Semaforo& s, int f);
 	virtual std::vector<Evento> run();
 };
 

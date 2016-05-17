@@ -4,7 +4,6 @@
 #include "FilaEnc.hpp"
 #include "Carro.hpp"
 #include "Semaforo.hpp"
-#include "Evento.hpp"
 
 class Pista {
 protected:
@@ -14,11 +13,11 @@ protected:
 
 public:
 	Pista(Direcao d, int tam, int vel);
-	virtual ~Pista() = default;
 	void adiciona(Carro c);
 	Carro retira();
 	bool estaVazia();
-	bool moveCarro(Semaforo& semaforo);
+	virtual bool moveCarro(Semaforo& semaforo);
+	int tempoParaPercorrer();
 };
 
 class Fonte : public Pista {
@@ -31,8 +30,8 @@ public:
 		Pista& sDir, Pista& sReto, Pista& sEsq);
 
 	void criaCarro();
-	bool moveCarro(Semaforo& semaforo);
-	EventoCriarCarro proximoEvento(int tempo);
+	virtual bool moveCarro(Semaforo& semaforo);
+	int tempoProximoEvento(int tempo);
 };
 
 class PistaCentro : public Pista {
@@ -42,9 +41,8 @@ private:
 public:
 	PistaCentro(Direcao d, int tam, int vel,
 		Pista& sDir, Pista& sReto, Pista& sEsq);
-	bool moveCarro(Semaforo& semaforo);
+	virtual bool moveCarro(Semaforo& semaforo);
 };
-
 
 class Sumidouro : public Pista {
 public:
