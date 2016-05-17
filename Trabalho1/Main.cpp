@@ -63,7 +63,7 @@ int main(int argc, char const *argv[]) {
 	int tempoAtual = 0;
 
 	while (tempoAtual <= tempoSimulacao) {
-		Evento eventoAtual = eventos.retira();
+		Evento eventoAtual = (EventoCriarCarro) eventos.retira();
 		tempoAtual = eventoAtual.getTempo();
 
 		auto vec = eventoAtual.run();

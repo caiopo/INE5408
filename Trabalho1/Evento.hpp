@@ -13,9 +13,7 @@ private:
 public:
 	explicit Evento(int t);
 	virtual ~Evento() {}
-
 	virtual std::vector<Evento> run();
-
 	int getTempo();
 
 	bool operator >(const Evento& e) const;
@@ -31,7 +29,6 @@ public:
 	bool operator !=(int i) const;
 	bool operator >=(int i) const;
 	bool operator <=(int i) const;
-
 };
 
 class EventoCriarCarro : public Evento {
@@ -39,7 +36,7 @@ private:
 	Fonte& fonte;
 public:
 	EventoCriarCarro(int t, Fonte& f);
-	virtual std::vector<Evento> run();
+	std::vector<Evento> run();
 };
 
 class EventoRemoverCarro : public Evento {
@@ -47,7 +44,7 @@ private:
 	Sumidouro& sumidouro;
 public:
 	EventoRemoverCarro(int t, Sumidouro& s);
-	virtual std::vector<Evento> run();
+	std::vector<Evento> run();
 };
 
 class EventoChegouNoSemaforo : public Evento {
@@ -56,7 +53,7 @@ private:
 	Pista& pista;
 public:
 	EventoChegouNoSemaforo(int t, Semaforo& s, Pista& p);
-	virtual std::vector<Evento> run();
+	std::vector<Evento> run();
 };
 
 class EventoAbrirSemaforo : public Evento {
@@ -65,7 +62,7 @@ private:
 	int frequencia;
 public:
 	EventoAbrirSemaforo(int t, Semaforo& s, int f);
-	virtual std::vector<Evento> run();
+	std::vector<Evento> run();
 };
 
 #endif  // EVENTO_HPP
