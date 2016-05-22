@@ -42,7 +42,6 @@ class ListaEnc {
 
 	// inicio
 
-
 	/**
 	 * @brief      Adiciona um dado no inicio da lista, tornando-o o novo head
 	 *
@@ -79,7 +78,6 @@ class ListaEnc {
 
 	// posicao
 
-
 	/**
 	 * @brief      Adiciona o dado na posição
 	 *
@@ -89,19 +87,18 @@ class ListaEnc {
 	void adicionaNaPosicao(const T& dado, int pos) {
 		if(pos > size || pos < 0)
 			throw std::runtime_error("posicao must be smaller than "
-									"ultimo+1 and greater than zero");
+									 "ultimo+1 and greater than zero");
 
 		if (pos == 0)
 			return adicionaNoInicio(dado);
 
-		if (pos == size+1)
+		if (pos == size)
 			return adiciona(dado);
 
 		auto e = head;
 
 		for (int i = 0; i < pos-1; ++i)
 			e = e->getProximo();
-
 
 		e->setProximo(std::make_shared<Elemento<T>>(dado, e->getProximo()));
 
@@ -264,8 +261,8 @@ class ListaEnc {
 	 * @param[in]  data  Dado a ser adicionado
 	 */
 	void adicionaEmOrdem(const T& data) {
-		if(listaVazia())
-			adicionaNoInicio(data);
+		if (listaVazia())
+			return adicionaNoInicio(data);
 
 		int pos = 0;
 
@@ -338,6 +335,10 @@ class ListaEnc {
 	void destroiLista() {
 		head = nullptr;
 		size = 0;
+	}
+
+	int getSize() {
+		return size;
 	}
 };
 

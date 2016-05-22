@@ -3,7 +3,7 @@
 
 class Carro {
 private:
-	int size = 0;
+	int size;
 	const int TAM_FIXO = 5, TAM_VAR = 4;
 public:
 	Carro();

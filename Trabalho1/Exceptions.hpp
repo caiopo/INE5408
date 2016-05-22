@@ -8,4 +8,10 @@ public:
     ErroPistaCheia() : std::runtime_error("") { }
 };
 
+class SemaforoNaoEstaNaDirecao : public std::runtime_error {
+public:
+    SemaforoNaoEstaNaDirecao() : std::runtime_error("") { }
+};
+
+
 #endif  // EXCEPTIONS_HPP

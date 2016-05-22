@@ -16,7 +16,6 @@ enum class NumSemaforo {
 
 std::ostream& operator<<(std::ostream& out, Direcao d);
 
-
 namespace DirecaoFunc {
 	Direcao getDireita(Direcao d);
 	Direcao getReto(Direcao d);

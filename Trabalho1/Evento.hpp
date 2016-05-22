@@ -5,6 +5,7 @@
 #include "Semaforo.hpp"
 #include "Pista.hpp"
 #include <vector>
+#include <memory>
 
 class Evento {
 private:
@@ -13,7 +14,7 @@ private:
 public:
 	explicit Evento(int t);
 	virtual ~Evento() {}
-	virtual std::vector<Evento> run();
+	virtual std::vector<std::shared_ptr<Evento>> run();
 	int getTempo();
 
 	bool operator >(const Evento& e) const;
@@ -36,7 +37,7 @@ private:
 	Fonte& fonte;
 public:
 	EventoCriarCarro(int t, Fonte& f);
-	std::vector<Evento> run();
+	std::vector<std::shared_ptr<Evento>> run();
 };
 
 class EventoRemoverCarro : public Evento {
@@ -44,25 +45,25 @@ private:
 	Sumidouro& sumidouro;
 public:
 	EventoRemoverCarro(int t, Sumidouro& s);
-	std::vector<Evento> run();
+	std::vector<std::shared_ptr<Evento>> run();
 };
 
 class EventoChegouNoSemaforo : public Evento {
 private:
-	Semaforo& semaforo;
 	Pista& pista;
 public:
-	EventoChegouNoSemaforo(int t, Semaforo& s, Pista& p);
-	std::vector<Evento> run();
+	EventoChegouNoSemaforo(int t, Pista& p);
+	std::vector<std::shared_ptr<Evento>> run();
 };
 
 class EventoAbrirSemaforo : public Evento {
 private:
+	std::string msg;
 	Semaforo& semaforo;
 	int frequencia;
 public:
-	EventoAbrirSemaforo(int t, Semaforo& s, int f);
-	std::vector<Evento> run();
+	EventoAbrirSemaforo(int t, std::string msg, Semaforo& s, int f);
+	std::vector<std::shared_ptr<Evento>> run();
 };
 
 #endif  // EVENTO_HPP

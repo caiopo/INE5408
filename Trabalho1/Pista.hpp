@@ -7,16 +7,17 @@
 
 class Pista {
 protected:
+	Semaforo& semaforo;
 	Direcao direcao;
 	FilaEnc<Carro> fila;
 	int tamanho = 0, velocidade = 0;
 
 public:
-	Pista(Direcao d, int tam, int vel);
+	Pista(Semaforo& s, Direcao d, int tam, int vel);
 	void adiciona(Carro c);
 	Carro retira();
 	bool estaVazia();
-	virtual bool moveCarro(Semaforo& semaforo);
+	virtual void moveCarro();
 	int tempoParaPercorrer();
 };
 
@@ -26,11 +27,11 @@ private:
 	Pista &saidaDir, &saidaReto, &saidaEsq;
 
 public:
-	Fonte(Direcao d, int tam, int vel, int fFixa, int fVar,
+	Fonte(Semaforo& s, Direcao d, int tam, int vel, int fFixa, int fVar,
 		Pista& sDir, Pista& sReto, Pista& sEsq);
 
 	void criaCarro();
-	virtual bool moveCarro(Semaforo& semaforo);
+	virtual void moveCarro();
 	int tempoProximoEvento(int tempo);
 };
 
@@ -39,14 +40,14 @@ private:
 	Pista &saidaDir, &saidaReto, &saidaEsq;
 
 public:
-	PistaCentro(Direcao d, int tam, int vel,
+	PistaCentro(Semaforo& s, Direcao d, int tam, int vel,
 		Pista& sDir, Pista& sReto, Pista& sEsq);
-	virtual bool moveCarro(Semaforo& semaforo);
+	virtual void moveCarro();
 };
 
 class Sumidouro : public Pista {
 public:
-	Sumidouro(Direcao d, int tam, int vel);
+	Sumidouro(Semaforo& s, Direcao d, int tam, int vel);
 };
 
 #endif  // PISTA_HPP

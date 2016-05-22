@@ -52,7 +52,7 @@ bool Evento::operator<=(int i) const {
 
 Evento::Evento(int t) : tempo(t) {}
 
-std::vector<Evento> Evento::run() {
+std::vector<std::shared_ptr<Evento>> Evento::run() {
 	throw std::logic_error("Evento::run can not be called");
 }
 
@@ -66,58 +66,58 @@ EventoCriarCarro::EventoCriarCarro(int t, Fonte& f) :
 EventoRemoverCarro::EventoRemoverCarro(int t, Sumidouro& s) :
 	Evento(t), sumidouro(s) {}
 
-EventoChegouNoSemaforo::EventoChegouNoSemaforo(int t, Semaforo& s, Pista& p) :
-	Evento(t), semaforo(s), pista(p) {}
+EventoChegouNoSemaforo::EventoChegouNoSemaforo(int t, Pista& p) :
+	Evento(t), pista(p) {}
 
-EventoAbrirSemaforo::EventoAbrirSemaforo(int t, Semaforo& s, int f) :
-	Evento(t), semaforo(s), frequencia(f) {}
+EventoAbrirSemaforo::EventoAbrirSemaforo(int t, std::string m, Semaforo& s, int f) :
+	Evento(t), msg(m), semaforo(s), frequencia(f) {}
 
-std::vector<Evento> EventoCriarCarro::run() {
-	std::cout << "Criando carro" << "\n";
-
+std::vector<std::shared_ptr<Evento>> EventoCriarCarro::run() {
 	fonte.criaCarro();
 
-	std::vector<Evento> newEvents;
+	std::vector<std::shared_ptr<Evento>> newEvents;
 
-	EventoCriarCarro e(fonte.tempoProximoEvento(getTempo()), fonte);
+	int tempoProx = fonte.tempoProximoEvento(getTempo());
 
-	newEvents.push_back(e);
+	newEvents.push_back(std::make_shared<EventoCriarCarro>(tempoProx, fonte));
+
+	newEvents.push_back(std::make_shared<EventoChegouNoSemaforo>(tempoProx, fonte));
 
 	return newEvents;
 }
 
-std::vector<Evento> EventoRemoverCarro::run() {
+std::vector<std::shared_ptr<Evento>> EventoRemoverCarro::run() {
 	std::cout << "Removendo carro" << "\n";
 
 	sumidouro.retira();
 
-	std::vector<Evento> newEvents;
+	std::vector<std::shared_ptr<Evento>> newEvents;
 
 	return newEvents;
 }
 
-std::vector<Evento> EventoChegouNoSemaforo::run() {
+std::vector<std::shared_ptr<Evento>> EventoChegouNoSemaforo::run() {
 	std::cout << "Chegou no semaforo" << "\n";
 
-	std::vector<Evento> newEvents;
+	std::vector<std::shared_ptr<Evento>> newEvents;
 
-	if (pista.moveCarro(semaforo)) {
-		return newEvents;
-	} else {
-		newEvents.push_back(EventoChegouNoSemaforo(getTempo()+5, semaforo, pista));
-		return newEvents;
-	}
+	// try {
+		pista.moveCarro();
+	// }
 
+	newEvents.push_back(std::make_shared<EventoChegouNoSemaforo>(getTempo()+5, pista));
+
+	return newEvents;
 }
 
-std::vector<Evento> EventoAbrirSemaforo::run() {
-	std::cout << "Proximo estado do semaforo" << "\n";
+std::vector<std::shared_ptr<Evento>> EventoAbrirSemaforo::run() {
+	std::cout << msg << "\n";
 
 	semaforo.proximoEstado();
 
-	std::vector<Evento> newEvents;
+	std::vector<std::shared_ptr<Evento>> newEvents;
 
-	newEvents.push_back(EventoAbrirSemaforo(getTempo()+frequencia, semaforo, frequencia));
+	newEvents.push_back(std::make_shared<EventoAbrirSemaforo>(getTempo()+frequencia, msg, semaforo, frequencia));
 
 	return newEvents;
 }

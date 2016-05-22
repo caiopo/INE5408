@@ -1,15 +1,22 @@
 #include "Pista.hpp"
 #include "Exceptions.hpp"
 #include <cstdlib>
+#include <sstream>
 
-Pista::Pista(Direcao d, int tam, int vel):
+Pista::Pista(Semaforo& s, Direcao d, int tam, int vel):
+	semaforo(s),
 	direcao(d),
 	tamanho(tam),
 	velocidade(vel) {}
 
 void Pista::adiciona(Carro c) {
-	if (c.getSize() > tamanho)
-		throw ErroPistaCheia();
+	if (c.getSize() > tamanho) {
+		std::stringstream ss;
+		ss << "pista cheia: " << direcao << " tam: " << tamanho
+			<< " vel: " << velocidade << "\n";
+		throw std::runtime_error(ss.str());
+	}
+
 
 	tamanho -= c.getSize();
 
@@ -28,7 +35,7 @@ bool Pista::estaVazia() {
 	return fila.filaVazia();
 }
 
-bool Pista::moveCarro(Semaforo&) {
+void Pista::moveCarro() {
 	throw std::logic_error("Pista::moveCarro not implemented");
 }
 
@@ -36,37 +43,41 @@ int Pista::tempoParaPercorrer() {
 	return tamanho / velocidade / 3.6;
 }
 
-PistaCentro::PistaCentro(Direcao d, int tam, int vel,
+PistaCentro::PistaCentro(Semaforo& s, Direcao d, int tam, int vel,
 		Pista& sDir, Pista& sReto, Pista& sEsq):
-	Pista(d, tam, vel),
+	Pista(s, d, tam, vel),
 	saidaDir(sDir),
 	saidaReto(sReto),
 	saidaEsq(sEsq) {}
 
 
-bool PistaCentro::moveCarro(Semaforo& semaforo) {
+void PistaCentro::moveCarro() {
 	if (semaforo.direcaoAtual() != direcao)
-		return false;
+		throw SemaforoNaoEstaNaDirecao();
 
 	Direcao dir	= semaforo.decideDirecao(direcao);
 
 	auto c = retira();
 
-	if (dir == DirecaoFunc::getDireita(direcao))
-		saidaDir.adiciona(c);
-	else if (dir == DirecaoFunc::getReto(direcao))
-		saidaReto.adiciona(c);
-	else if (dir == DirecaoFunc::getEsquerda(direcao))
-		saidaEsq.adiciona(c);
-	else
-		throw std::logic_error("error in PistaCentro::moveCarro");
+	if (dir == DirecaoFunc::getDireita(direcao)) {
+			saidaDir.adiciona(c);
+			throw saidaDir;
 
-	return true;
+	} else if (dir == DirecaoFunc::getReto(direcao)) {
+		saidaReto.adiciona(c);
+		throw saidaReto;
+
+	} else if (dir == DirecaoFunc::getEsquerda(direcao)) {
+		saidaEsq.adiciona(c);
+		throw saidaEsq;
+
+	} else
+		throw std::logic_error("error in PistaCentro::moveCarro");
 }
 
-Fonte::Fonte(Direcao d, int tam, int vel, int fFixa, int fVar,
+Fonte::Fonte(Semaforo& s, Direcao d, int tam, int vel, int fFixa, int fVar,
 	Pista& sDir, Pista& sReto, Pista& sEsq):
-	Pista(d, tam, vel),
+	Pista(s, d, tam, vel),
 	frequenciaFixa(fFixa - fVar),
 	frequenciaVariavel(2*fVar),
 	saidaDir(sDir),
@@ -74,32 +85,39 @@ Fonte::Fonte(Direcao d, int tam, int vel, int fFixa, int fVar,
 	saidaEsq(sEsq) {}
 
 void Fonte::criaCarro() {
-	adiciona(Carro());
+	Carro c;
+
+	std::cout << "Carro entrando no sistema. Tamanho: " << c.getSize() << "\n";
+
+	adiciona(c);
 }
 
-bool Fonte::moveCarro(Semaforo& semaforo) {
+void Fonte::moveCarro() {
 	if (semaforo.direcaoAtual() != direcao)
-		return false;
+		throw SemaforoNaoEstaNaDirecao();
 
 	Direcao dir	= semaforo.decideDirecao(direcao);
 
 	auto c = retira();
 
-	if (dir == DirecaoFunc::getDireita(direcao))
+	if (dir == DirecaoFunc::getDireita(direcao)) {
 		saidaDir.adiciona(c);
-	else if (dir == DirecaoFunc::getReto(direcao))
-		saidaReto.adiciona(c);
-	else if (dir == DirecaoFunc::getEsquerda(direcao))
-		saidaEsq.adiciona(c);
-	else
-		throw std::logic_error("error in Fonte::moveCarro");
+		throw saidaDir;
 
-	return true;
+	} else if (dir == DirecaoFunc::getReto(direcao)) {
+		saidaReto.adiciona(c);
+		throw saidaReto;
+
+	} else if (dir == DirecaoFunc::getEsquerda(direcao)) {
+		saidaEsq.adiciona(c);
+		throw saidaEsq;
+	} else
+		throw std::logic_error("error in Fonte::moveCarro");
 }
 
 int Fonte::tempoProximoEvento(int tempo) {
-	return tempo+frequenciaFixa+frequenciaVariavel*rand()/RAND_MAX;
+	return tempo+frequenciaFixa+frequenciaVariavel*float(rand())/RAND_MAX;
 }
 
-Sumidouro::Sumidouro(Direcao d, int tam, int vel):
-	Pista(d, tam, vel) {}
+Sumidouro::Sumidouro(Semaforo& s, Direcao d, int tam, int vel):
+	Pista(s, d, tam, vel) {}
