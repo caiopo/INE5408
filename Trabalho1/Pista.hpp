@@ -11,14 +11,21 @@ protected:
 	Direcao direcao;
 	FilaEnc<Carro> fila;
 	int tamanho = 0, velocidade = 0;
+	int entraram = 0, sairam = 0;
+	static int totalEntraram, totalSairam;
 
 public:
 	Pista(Semaforo& s, Direcao d, int tam, int vel);
 	void adiciona(Carro c);
 	Carro retira();
 	bool estaVazia();
-	virtual void moveCarro();
-	int tempoParaPercorrer();
+	virtual Pista& moveCarro();
+	int tempoParaPercorrer() const;
+	int quantosEntraram() const;
+	int quantosSairam() const;
+	int estaoDentro() const;
+	static int totalQuantosEntraram();
+	static int totalQuantosSairam();
 };
 
 class Fonte : public Pista {
@@ -31,7 +38,7 @@ public:
 		Pista& sDir, Pista& sReto, Pista& sEsq);
 
 	void criaCarro();
-	virtual void moveCarro();
+	virtual Pista& moveCarro();
 	int tempoProximoEvento(int tempo);
 };
 
@@ -42,7 +49,7 @@ private:
 public:
 	PistaCentro(Semaforo& s, Direcao d, int tam, int vel,
 		Pista& sDir, Pista& sReto, Pista& sEsq);
-	virtual void moveCarro();
+	virtual Pista& moveCarro();
 };
 
 class Sumidouro : public Pista {

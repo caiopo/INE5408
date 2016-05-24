@@ -1,7 +1,6 @@
 #ifndef LISTAORDENADA_HPP
 #define LISTAORDENADA_HPP
 
-#include "Evento.hpp"
 #include "ListaEnc.hpp"
 
 template<typename T>
@@ -14,6 +13,7 @@ public:
 	T retira();
 	bool estaVazia();
 	int getSize();
+	void print();
 };
 
 template<typename T>
@@ -34,6 +34,11 @@ bool ListaOrdenada<T>::estaVazia() {
 template<typename T>
 int ListaOrdenada<T>::getSize() {
 	return lista.getSize();
+}
+
+template<typename T>
+void ListaOrdenada<T>::print() {
+	lista.print();
 }
 
 #endif  // LISTAORDENADA_HPP

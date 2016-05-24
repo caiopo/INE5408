@@ -3,6 +3,7 @@
 #ifndef LISTAENC_HPP
 #define LISTAENC_HPP
 
+#include <iostream>
 #include <stdexcept>
 #include <memory>
 #include "Elemento.hpp"
@@ -168,7 +169,7 @@ class ListaEnc {
 	 * @return     O dado retirado
 	 */
 	T retiraDaPosicao(int pos) {
-		if(pos >= size || pos < 0)
+		if(pos > size || pos < 0)
 			throw std::runtime_error("posicao must be smaller than "
 									"ultimo+1 and greater than zero");
 
@@ -265,11 +266,12 @@ class ListaEnc {
 			return adicionaNoInicio(data);
 
 		int pos = 0;
-
 		auto e = head;
 
-		while (pos <= size && data > e->getInfo())
-			pos++;
+		while (pos < size && *data > *e->getInfo()) {
+			++pos;
+			e = e->getProximo();
+		}
 
 		adicionaNaPosicao(data, pos);
 	}
@@ -339,6 +341,15 @@ class ListaEnc {
 
 	int getSize() {
 		return size;
+	}
+
+	void print() {
+		auto e = head;
+
+		while(e) {
+			e->getInfo()->print();
+			e = e->getProximo();
+		}
 	}
 };
 

@@ -3,6 +3,9 @@
 #include <cstdlib>
 #include <sstream>
 
+int Pista::totalEntraram = 0;
+int Pista::totalSairam = 0;
+
 Pista::Pista(Semaforo& s, Direcao d, int tam, int vel):
 	semaforo(s),
 	direcao(d),
@@ -20,6 +23,9 @@ void Pista::adiciona(Carro c) {
 
 	tamanho -= c.getSize();
 
+	++entraram;
+	++totalEntraram;
+
 	fila.inclui(c);
 }
 
@@ -28,6 +34,9 @@ Carro Pista::retira() {
 
 	tamanho += c.getSize();
 
+	++sairam;
+	++totalSairam;
+
 	return c;
 }
 
@@ -35,12 +44,32 @@ bool Pista::estaVazia() {
 	return fila.filaVazia();
 }
 
-void Pista::moveCarro() {
+Pista& Pista::moveCarro() {
 	throw std::logic_error("Pista::moveCarro not implemented");
 }
 
-int Pista::tempoParaPercorrer() {
+int Pista::tempoParaPercorrer() const {
 	return tamanho / velocidade / 3.6;
+}
+
+int Pista::quantosEntraram() const {
+	return entraram;
+}
+
+int Pista::quantosSairam() const {
+	return sairam;
+}
+
+int Pista::estaoDentro() const {
+	return entraram-sairam;
+}
+
+int Pista::totalQuantosEntraram() {
+	return totalEntraram;
+}
+
+int Pista::totalQuantosSairam() {
+	return totalSairam;
 }
 
 PistaCentro::PistaCentro(Semaforo& s, Direcao d, int tam, int vel,
@@ -51,7 +80,7 @@ PistaCentro::PistaCentro(Semaforo& s, Direcao d, int tam, int vel,
 	saidaEsq(sEsq) {}
 
 
-void PistaCentro::moveCarro() {
+Pista& PistaCentro::moveCarro() {
 	if (semaforo.direcaoAtual() != direcao)
 		throw SemaforoNaoEstaNaDirecao();
 
@@ -60,16 +89,16 @@ void PistaCentro::moveCarro() {
 	auto c = retira();
 
 	if (dir == DirecaoFunc::getDireita(direcao)) {
-			saidaDir.adiciona(c);
-			throw saidaDir;
+		saidaDir.adiciona(c);
+		return saidaDir;
 
 	} else if (dir == DirecaoFunc::getReto(direcao)) {
 		saidaReto.adiciona(c);
-		throw saidaReto;
+		return saidaReto;
 
 	} else if (dir == DirecaoFunc::getEsquerda(direcao)) {
 		saidaEsq.adiciona(c);
-		throw saidaEsq;
+		return saidaEsq;
 
 	} else
 		throw std::logic_error("error in PistaCentro::moveCarro");
@@ -92,7 +121,7 @@ void Fonte::criaCarro() {
 	adiciona(c);
 }
 
-void Fonte::moveCarro() {
+Pista& Fonte::moveCarro() {
 	if (semaforo.direcaoAtual() != direcao)
 		throw SemaforoNaoEstaNaDirecao();
 
@@ -102,15 +131,15 @@ void Fonte::moveCarro() {
 
 	if (dir == DirecaoFunc::getDireita(direcao)) {
 		saidaDir.adiciona(c);
-		throw saidaDir;
+		return saidaDir;
 
 	} else if (dir == DirecaoFunc::getReto(direcao)) {
 		saidaReto.adiciona(c);
-		throw saidaReto;
+		return saidaReto;
 
 	} else if (dir == DirecaoFunc::getEsquerda(direcao)) {
 		saidaEsq.adiciona(c);
-		throw saidaEsq;
+		return saidaEsq;
 	} else
 		throw std::logic_error("error in Fonte::moveCarro");
 }

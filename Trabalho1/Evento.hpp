@@ -6,6 +6,7 @@
 #include "Pista.hpp"
 #include <vector>
 #include <memory>
+#include <iostream>
 
 class Evento {
 private:
@@ -15,7 +16,9 @@ public:
 	explicit Evento(int t);
 	virtual ~Evento() {}
 	virtual std::vector<std::shared_ptr<Evento>> run();
-	int getTempo();
+	int getTempo() const;
+
+	virtual void print();
 
 	bool operator >(const Evento& e) const;
 	bool operator <(const Evento& e) const;
@@ -38,6 +41,7 @@ private:
 public:
 	EventoCriarCarro(int t, Fonte& f);
 	std::vector<std::shared_ptr<Evento>> run();
+	void print();
 };
 
 class EventoRemoverCarro : public Evento {
@@ -46,6 +50,7 @@ private:
 public:
 	EventoRemoverCarro(int t, Sumidouro& s);
 	std::vector<std::shared_ptr<Evento>> run();
+	void print();
 };
 
 class EventoChegouNoSemaforo : public Evento {
@@ -54,6 +59,7 @@ private:
 public:
 	EventoChegouNoSemaforo(int t, Pista& p);
 	std::vector<std::shared_ptr<Evento>> run();
+	void print();
 };
 
 class EventoAbrirSemaforo : public Evento {
@@ -64,6 +70,7 @@ private:
 public:
 	EventoAbrirSemaforo(int t, std::string msg, Semaforo& s, int f);
 	std::vector<std::shared_ptr<Evento>> run();
+	void print();
 };
 
 #endif  // EVENTO_HPP

@@ -3,10 +3,10 @@
 
 #include <stdexcept>
 
-class ErroPistaCheia : public std::runtime_error {
-public:
-    ErroPistaCheia() : std::runtime_error("") { }
-};
+// class ErroPistaCheia : public std::runtime_error {
+// public:
+//     ErroPistaCheia() : std::runtime_error("") { }
+// };
 
 class SemaforoNaoEstaNaDirecao : public std::runtime_error {
 public:

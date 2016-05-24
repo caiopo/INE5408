@@ -1,5 +1,5 @@
 #include "Evento.hpp"
-#include <stdexcept>
+#include "Exceptions.hpp"
 #include <iostream>
 
 bool Evento::operator>(const Evento& e) const {
@@ -56,8 +56,12 @@ std::vector<std::shared_ptr<Evento>> Evento::run() {
 	throw std::logic_error("Evento::run can not be called");
 }
 
-int Evento::getTempo() {
+int Evento::getTempo() const {
 	return tempo;
+}
+
+void Evento::print() {
+	std::cout << "Evento. Tempo: " << tempo << "\n";
 }
 
 EventoCriarCarro::EventoCriarCarro(int t, Fonte& f) :
@@ -87,8 +91,6 @@ std::vector<std::shared_ptr<Evento>> EventoCriarCarro::run() {
 }
 
 std::vector<std::shared_ptr<Evento>> EventoRemoverCarro::run() {
-	std::cout << "Removendo carro" << "\n";
-
 	sumidouro.retira();
 
 	std::vector<std::shared_ptr<Evento>> newEvents;
@@ -97,17 +99,25 @@ std::vector<std::shared_ptr<Evento>> EventoRemoverCarro::run() {
 }
 
 std::vector<std::shared_ptr<Evento>> EventoChegouNoSemaforo::run() {
-	std::cout << "Chegou no semaforo" << "\n";
-
 	std::vector<std::shared_ptr<Evento>> newEvents;
 
-	// try {
-		pista.moveCarro();
-	// }
+	Pista* saida;
 
-	newEvents.push_back(std::make_shared<EventoChegouNoSemaforo>(getTempo()+5, pista));
+	try {
+		saida = &pista.moveCarro();
+	} catch (SemaforoNaoEstaNaDirecao& err) {
+		newEvents.push_back(std::make_shared<EventoChegouNoSemaforo>(getTempo()+5, pista));
+		return newEvents;
+	}
+
+	if (Sumidouro* s = dynamic_cast<Sumidouro*>(saida)) {
+		newEvents.push_back(std::make_shared<EventoRemoverCarro>(getTempo()+s->tempoParaPercorrer(), *s));
+	} else {
+		newEvents.push_back(std::make_shared<EventoChegouNoSemaforo>(getTempo()+saida->tempoParaPercorrer(), *saida));
+	}
 
 	return newEvents;
+
 }
 
 std::vector<std::shared_ptr<Evento>> EventoAbrirSemaforo::run() {
@@ -120,4 +130,20 @@ std::vector<std::shared_ptr<Evento>> EventoAbrirSemaforo::run() {
 	newEvents.push_back(std::make_shared<EventoAbrirSemaforo>(getTempo()+frequencia, msg, semaforo, frequencia));
 
 	return newEvents;
+}
+
+void EventoCriarCarro::print() {
+	std::cout << "CriarCarro\n";
+}
+
+void EventoRemoverCarro::print() {
+	std::cout << "RemoverCarro\n";
+}
+
+void EventoChegouNoSemaforo::print() {
+	std::cout << "ChegouNoSemaforo\n";
+}
+
+void EventoAbrirSemaforo::print() {
+	std::cout << "AbrirSemaforo: " << msg << "\n";
 }

@@ -1,3 +1,4 @@
+#include "Evento.hpp"
 #include "ListaOrdenada.hpp"
 #include "Semaforo.hpp"
 #include "Pista.hpp"
@@ -6,9 +7,7 @@
 #include <iostream>
 #include <memory>
 
-// ListaOrdenada de eventos
 ListaOrdenada<std::shared_ptr<Evento>> eventos;
-// ListaEnc<std::unique_ptr<Evento>> eventos;
 
 // Semáforos
 Semaforo semaforo1(NumSemaforo::S1), semaforo2(NumSemaforo::S2);
@@ -24,8 +23,8 @@ Sumidouro L1leste(semaforo2, Direcao::LESTE, 400, 30);
 Sumidouro S2sul(semaforo2, Direcao::SUL, 500, 40);
 
 // Pistas centrais
-Pista C1oeste(semaforo1, Direcao::OESTE, 300, 60);
-Pista C1leste(semaforo2, Direcao::LESTE, 300, 60);
+PistaCentro C1oeste(semaforo1, Direcao::OESTE, 300, 60, N1norte, O1oeste, S1sul);
+PistaCentro C1leste(semaforo2, Direcao::LESTE, 300, 60, S2sul, L1leste, N2norte);
 
 // Fontes do semaforo1
 Fonte N1sul(semaforo1, Direcao::SUL, 500, 60, 20, 5, O1oeste, S1sul, C1leste);
@@ -38,6 +37,88 @@ Fonte L1oeste(semaforo2, Direcao::OESTE, 400, 30, 10, 2, N2norte, C1oeste, S2sul
 Fonte S2norte(semaforo2, Direcao::NORTE, 500, 40, 60, 15, L1leste, N2norte, C1oeste);
 
 int tempoSimulacao, frequenciaSemaforo;
+
+void relatorio() {
+	std::cout << "Relatório:\n" <<
+
+	"\nFontes do Semáforo 1\n" <<
+
+	"N1sul { Entraram: "   << N1sul.quantosEntraram() <<
+	" Sairam: " 		   << N1sul.quantosSairam() <<
+	" Estão dentro: " 	   << N1sul.estaoDentro() << " }\n"
+
+	"O1leste { Entraram: " << O1leste.quantosEntraram() <<
+	" Sairam: " 		   << O1leste.quantosSairam() <<
+	" Estão dentro: " 	   << O1leste.estaoDentro() << " }\n"
+
+	"S1norte { Entraram: " << S1norte.quantosEntraram() <<
+	" Sairam: " 		   << S1norte.quantosSairam() <<
+	" Estão dentro: " 	   << S1norte.estaoDentro() << " }\n"
+
+
+	"\nFontes do Semáforo 2\n" <<
+
+	"N2sul { Entraram: "   << N2sul.quantosEntraram() <<
+	" Sairam: " 		   << N2sul.quantosSairam() <<
+	" Estão dentro: " 	   << N2sul.estaoDentro() << " }\n"
+
+	"L1oeste { Entraram: " << L1oeste.quantosEntraram() <<
+	" Sairam: " 		   << L1oeste.quantosSairam() <<
+	" Estão dentro: " 	   << L1oeste.estaoDentro() << " }\n"
+
+	"S2norte { Entraram: " << S2norte.quantosEntraram() <<
+	" Sairam: " 		   << S2norte.quantosSairam() <<
+	" Estão dentro: " 	   << S2norte.estaoDentro() << " }\n"
+
+
+	"\nPistas centrais\n" <<
+
+	"C1oeste { Entraram: " << C1oeste.quantosEntraram() <<
+	" Sairam: " 		   << C1oeste.quantosSairam() <<
+	" Estão dentro: " 	   << C1oeste.estaoDentro() << " }\n"
+
+	"C1leste { Entraram: " << C1leste.quantosEntraram() <<
+	" Sairam: " 		   << C1leste.quantosSairam() <<
+	" Estão dentro: " 	   << C1leste.estaoDentro() << " }\n"
+
+
+	"\nSumidouros do Semáforo 1\n" <<
+
+	"O1oeste { Entraram: " << O1oeste.quantosEntraram() <<
+	" Sairam: " 		   << O1oeste.quantosSairam() <<
+	" Estão dentro: " 	   << O1oeste.estaoDentro() << " }\n"
+
+	"N1norte { Entraram: " << N1norte.quantosEntraram() <<
+	" Sairam: " 		   << N1norte.quantosSairam() <<
+	" Estão dentro: " 	   << N1norte.estaoDentro() << " }\n"
+
+	"S1sul { Entraram: "   << S1sul.quantosEntraram() <<
+	" Sairam: " 		   << S1sul.quantosSairam() <<
+	" Estão dentro: " 	   << S1sul.estaoDentro() << " }\n"
+
+
+	"\nSumidouros do Semáforo 2\n" <<
+
+	"N2norte { Entraram: " << N2norte.quantosEntraram() <<
+	" Sairam: " 		   << N2norte.quantosSairam() <<
+	" Estão dentro: " 	   << N2norte.estaoDentro() << " }\n"
+
+	"L1leste { Entraram: " << L1leste.quantosEntraram() <<
+	" Sairam: " 		   << L1leste.quantosSairam() <<
+	" Estão dentro: " 	   << L1leste.estaoDentro() << " }\n"
+
+	"S2sul { Entraram: "   << S2sul.quantosEntraram() <<
+	" Sairam: " 		   << S2sul.quantosSairam() <<
+	" Estão dentro: " 	   << S2sul.estaoDentro() << " }\n\n"
+
+
+	"Total { Entraram: " << Pista::totalQuantosEntraram() <<
+	" Sairam: " 		 << Pista::totalQuantosSairam() <<
+	" Estão dentro: "
+	<< Pista::totalQuantosEntraram() - Pista::totalQuantosSairam() << " }\n"
+
+	<< std::endl;
+}
 
 int main(int argc, char const *argv[]) {
 	srand(time(0));
@@ -55,29 +136,39 @@ int main(int argc, char const *argv[]) {
 		exit(1);
 	}
 
-	std::cout << eventos.getSize() << std::endl;
 
 	eventos.adiciona(std::make_shared<EventoCriarCarro>(0, N1sul));
+	eventos.adiciona(std::make_shared<EventoCriarCarro>(0, O1leste));
+	eventos.adiciona(std::make_shared<EventoCriarCarro>(0, S1norte));
+	eventos.adiciona(std::make_shared<EventoCriarCarro>(0, N2sul));
+	eventos.adiciona(std::make_shared<EventoCriarCarro>(0, S2norte));
 
-	eventos.adiciona(std::make_shared<EventoAbrirSemaforo>(0, "s2", semaforo2, frequenciaSemaforo));
-	eventos.adiciona(std::make_shared<EventoAbrirSemaforo>(1, "s1", semaforo1, frequenciaSemaforo));
+	eventos.adiciona(std::make_shared<EventoAbrirSemaforo>(0, "S1", semaforo1, frequenciaSemaforo));
+	eventos.adiciona(std::make_shared<EventoAbrirSemaforo>(0, "S2", semaforo2, frequenciaSemaforo));
 
-	// eventos.adiciona
+	eventos.print();
 
-	std::cout << eventos.getSize() << std::endl;
+	std::cout << std::endl << std::endl;
 
 	int tempoAtual = 0;
 
 	while (tempoAtual <= tempoSimulacao) {
 		auto eventoAtual = eventos.retira();
-		std::cout << "Iniciando ciclo. Tempo atual: " << tempoAtual << "  {\n";
 		tempoAtual = eventoAtual->getTempo();
+		std::cout << "Iniciando evento. Tempo atual: " << tempoAtual << "  {\n";
+		std::cout << "Evento atual: ";
+
+		eventoAtual->print();
 
 		auto vec = eventoAtual->run();
 
 		for (auto i = vec.begin(); i != vec.end(); ++i)
 			eventos.adiciona(*i);
 
-		std::cout << "}\n";
+		// eventos.print();
+
+		std::cout << "}\n\n";
 	}
+
+	relatorio();
 }
