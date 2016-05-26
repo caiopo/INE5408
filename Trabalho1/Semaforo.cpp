@@ -3,6 +3,13 @@
 #include <cstdlib>
 #include <iostream>
 
+/**
+ * @brief      Retorna a direita de uma direção
+ *
+ * @param[in]  d     A direção escolhida
+ *
+ * @return     A direita de d
+ */
 Direcao DirecaoFunc::getDireita(Direcao d) {
 	switch (d) {
 	case Direcao::NORTE:
@@ -24,6 +31,13 @@ Direcao DirecaoFunc::getDireita(Direcao d) {
 	return Direcao::NORTE;
 }
 
+/**
+ * @brief      Retorna a direção oposta a uma direção
+ *
+ * @param[in]  d     A direção escolhida
+ *
+ * @return     O oposto de d
+ */
 Direcao DirecaoFunc::getReto(Direcao d) {
 	switch (d) {
 	case Direcao::NORTE:
@@ -45,6 +59,13 @@ Direcao DirecaoFunc::getReto(Direcao d) {
 	return Direcao::NORTE;
 }
 
+/**
+ * @brief      Retorna a esquerda de uma direção
+ *
+ * @param[in]  d     A direção escolhida
+ *
+ * @return     A esquerda de d
+ */
 Direcao DirecaoFunc::getEsquerda(Direcao d) {
 	switch (d) {
 	case Direcao::NORTE:
@@ -67,6 +88,17 @@ Direcao DirecaoFunc::getEsquerda(Direcao d) {
 }
 
 namespace {
+
+	/**
+	 * @brief      Decide a direção que deverá ser virada
+	 *
+	 * @param[in]  atual     Direção atual
+	 * @param[in]  probEsq   Probabilidade de virar a esquerda
+	 * @param[in]  probReto  Probabilidade de seguir em frente
+	 * @param[in]  probDir   Probabilidade de virar a direita
+	 *
+	 * @return     A direção que deverá ser virada
+	 */
 	Direcao random(Direcao atual, int probEsq, int probReto, int probDir) {
 		if (probEsq+probReto+probDir != 100)
 			throw std::logic_error("");
@@ -82,6 +114,14 @@ namespace {
 	}
 }
 
+/**
+ * @brief      Operador de inserção em stream do tipo Direcao
+ *
+ * @param      out   Stream de saida para inserir a direção
+ * @param[in]  d     A direção
+ *
+ * @return     A stream out
+ */
 std::ostream& operator<<(std::ostream& out, Direcao d){
 	switch(d) {
 	case Direcao::NORTE:

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <memory>
 
+// Lista ordenada que contém ponteiros para Eventos
 ListaOrdenada<std::shared_ptr<Evento>> eventos;
 
 // Semáforos
@@ -36,8 +37,9 @@ Fonte N2sul(semaforo2, Direcao::SUL, 500, 40, 20, 5, O1oeste, S2sul, L1leste);
 Fonte L1oeste(semaforo2, Direcao::OESTE, 400, 30, 10, 2, N2norte, C1oeste, S2sul);
 Fonte S2norte(semaforo2, Direcao::NORTE, 500, 40, 60, 15, L1leste, N2norte, C1oeste);
 
-int tempoSimulacao, frequenciaSemaforo;
-
+/**
+ * @brief      Imprime o relatório de todas as pistas no stdout
+ */
 void relatorio() {
 	std::cout << "Relatório:\n" <<
 
@@ -120,6 +122,8 @@ void relatorio() {
 	<< std::endl;
 }
 
+int tempoSimulacao, frequenciaSemaforo;
+
 int main(int argc, char const *argv[]) {
 	srand(time(0));
 
@@ -135,7 +139,6 @@ int main(int argc, char const *argv[]) {
 		std::cout << "tempoSimulacao or frequenciaSemaforo inválidos" << std::endl;
 		exit(1);
 	}
-
 
 	eventos.adiciona(std::make_shared<EventoCriarCarro>(0, N1sul));
 	eventos.adiciona(std::make_shared<EventoCriarCarro>(0, O1leste));

@@ -3,11 +3,9 @@
 
 #include <stdexcept>
 
-// class ErroPistaCheia : public std::runtime_error {
-// public:
-//     ErroPistaCheia() : std::runtime_error("") { }
-// };
-
+/**
+ * @brief      Representa a exception jogada quando um carro tenta trocar de pista e o semáforo não está na direcão
+ */
 class SemaforoNaoEstaNaDirecao : public std::runtime_error {
 public:
     SemaforoNaoEstaNaDirecao() : std::runtime_error("") { }

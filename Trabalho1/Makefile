@@ -1,4 +1,4 @@
-FLAGS=-Wall -Wextra -pedantic -std=c++11 # -O3
+FLAGS=-Wall -Wextra -pedantic -std=c++11 -O3
 # CPPS={Evento,Pista,Carro,Semaforo}.cpp
 
 CPPS=Evento.cpp Pista.cpp Carro.cpp Semaforo.cpp
