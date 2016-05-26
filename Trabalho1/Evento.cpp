@@ -77,15 +77,25 @@ EventoAbrirSemaforo::EventoAbrirSemaforo(int t, std::string m, Semaforo& s, int 
 	Evento(t), msg(m), semaforo(s), frequencia(f) {}
 
 std::vector<std::shared_ptr<Evento>> EventoCriarCarro::run() {
-	fonte.criaCarro();
+	bool funcionou = true;
+
+	try {
+		fonte.criaCarro();
+	} catch (std::runtime_error& err) {
+		funcionou = false;
+	}
 
 	std::vector<std::shared_ptr<Evento>> newEvents;
 
-	int tempoProx = fonte.tempoProximoEvento(getTempo());
+	if (funcionou) {
+		int tempoProx = fonte.tempoProximoEvento(getTempo());
 
-	newEvents.push_back(std::make_shared<EventoCriarCarro>(tempoProx, fonte));
+		newEvents.push_back(std::make_shared<EventoCriarCarro>(tempoProx, fonte));
 
-	newEvents.push_back(std::make_shared<EventoChegouNoSemaforo>(tempoProx, fonte));
+		newEvents.push_back(std::make_shared<EventoChegouNoSemaforo>(tempoProx, fonte));
+	} else {
+		newEvents.push_back(std::make_shared<EventoCriarCarro>(getTempo()+5, fonte));
+	}
 
 	return newEvents;
 }

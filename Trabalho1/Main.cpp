@@ -1,3 +1,7 @@
+// Trabalho feito por:
+// Caio Pereira Oliveira (15100724)
+// Rodrigo Garcia (15100763)
+
 #include "Evento.hpp"
 #include "ListaOrdenada.hpp"
 #include "Semaforo.hpp"
