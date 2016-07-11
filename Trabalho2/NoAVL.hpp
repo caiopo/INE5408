@@ -1,6 +1,7 @@
 #ifndef NO_AVL_HPP
 #define NO_AVL_HPP
 #include <vector>
+#include <stdexcept>
 
 template <typename T>
 class NoAVL  {
