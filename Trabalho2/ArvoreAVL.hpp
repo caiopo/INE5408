@@ -13,16 +13,26 @@ class ArvoreAVL {
 	ArvoreAVL() = default;
 
 	ArvoreAVL(const std::string filename) {
-		std::ifstream input(filename.c_str(),
-			std::ios::in | std::ios::binary);
+		std::ifstream input(filename, std::ios::in | std::ios::binary);
+
+		if (!input) {
+			throw std::runtime_error("ArvoreAVL::ctor: could not open file");
+		}
 
 		T obj;
 
 		while (input.good()) {
 			input.read((char*) &obj, sizeof(T));
 
-			inserir(obj);
+			try {
+				inserir(obj);
+			} catch (std::runtime_error& err) {
+				// std::cout << "Chave repetida!" << std::endl;
+				break;
+			}
 		}
+
+		input.close();
 	}
 
 	~ArvoreAVL() {
@@ -39,7 +49,7 @@ class ArvoreAVL {
 
 	void remover(T dado) {
 		if (!root) {
-			throw std::runtime_error("error in ArvoreAVL::remover: arvore vazia");
+			throw std::runtime_error("ArvoreAVL::remover: arvore vazia");
 		}
 
 		root = root->remover(root, dado);
@@ -50,10 +60,13 @@ class ArvoreAVL {
 	}
 
 	void saveOnDisk(const std::string filename) {
-		std::ofstream output(filename.c_str(),
-			std::ios::out | std::ios::binary);
+		std::ofstream output(filename, std::ios::out | std::ios::binary);
 
-		auto vec = preOrdem();
+		if (!output) {
+			throw std::runtime_error("ArvoreAVL::saveOnDisk: could not open file");
+		}
+
+		auto vec = emOrdem();
 
 		for (auto i = vec.begin(); i != vec.end(); ++i) {
 
@@ -61,22 +74,24 @@ class ArvoreAVL {
 
 			output.write((char*) &obj, sizeof(T));
 		}
+
+		output.close();
 	}
 
 	std::vector<NoAVL<T>*> emOrdem() {
-		root->getElementos().clear();
+		root->elementos.clear();
 		root->emOrdem(root);
 		return root->getElementos();
 	}
 
 	std::vector<NoAVL<T>*> preOrdem() {
-		root->getElementos().clear();
+		root->elementos.clear();
 		root->preOrdem(root);
 		return root->getElementos();
 	}
 
 	std::vector<NoAVL<T>*> posOrdem() {
-		root->getElementos().clear();
+		root->elementos.clear();
 		root->posOrdem(root);
 		return root->getElementos();
 	}

@@ -10,9 +10,10 @@ class NoAVL  {
 	T* dado;
 	NoAVL<T>* esquerda = nullptr;
 	NoAVL<T>* direita = nullptr;
-	std::vector<NoAVL<T>*> elementos;
 
  public:
+	std::vector<NoAVL<T>*> elementos;
+
 	explicit NoAVL(const T& d) {
 		dado = new T(d);
 	}
@@ -54,7 +55,9 @@ class NoAVL  {
 			return new NoAVL(dado);
 		}
 
-		if (dado < *arv->dado) {
+		if (dado == *arv->dado) {
+			throw std::runtime_error("NoAVL::inserir: inserting duplicate key");
+		} else if (dado < *arv->dado) {
 			arv->esquerda = inserir(dado, arv->esquerda);
 		} else {
 			arv->direita = inserir(dado, arv->direita);
@@ -151,7 +154,7 @@ class NoAVL  {
 		}
 
 		if (!arv) {
-			throw std::runtime_error("error in NoAVL::busca: dado not found");
+			throw std::runtime_error("NoAVL::busca: dado not found");
 		}
 
 		return arv->dado;

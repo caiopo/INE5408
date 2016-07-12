@@ -1,71 +1,95 @@
 #include "Utils.hpp"
-#include "Registro.hpp"
 #include "ArvoreAVL.hpp"
+#include "Init.hpp"
 #include <iostream>
-#include <fstream>
 #include <cstring>
-#include <cstdlib>
 
-const char* path = "ManPages/";
-const char* manpagesfile = "ManPages.dat";
-
-void init();
-void read();
 void search();
 
+int main(int argc, const char* argv[]) {
+	std::string teste = "<beginning of page>"
+"atan, atanf, atanl <-> arc tangent function"
+"c99 [ flag... ] file... -lm [ library... ]"
+"#include <math.h>"
+"double atan(double x);"
+"float atanf(float x);"
+"long double atanl(long double x);"
+"These functions compute the principal value of the arc tangent of x."
+"Upon successful completion, these functions return the arc tangent of x in the range [<mi><*p> /2,<*p> /2] radians."
+"If x is NaN, NaN is returned."
+"If x is <+->0, x is returned."
+"If x is <+->Inf, <+-><*p> /2 is returned."
+"No errors are defined."
+"See attributes(5) for descriptions of the following attributes:"
+"tab() box; cw(2.75i) |cw(2.75i) lw(2.75i) |lw(2.75i) ATTRIBUTE TYPEATTRIBUTE VALUE _ Interface Stability<hy>"
+"Standard _ MT-LevelMT-Safe"
+"atan2(3M), isnan(3M), math.h(3HEAD), tan(3M), attributes(5), standards(5)";
 
-int main() {
-	ArvoreAVL<int> avl;
 
-	for (int i = 0; i < 10; ++i) {
-		avl.inserir(i);
+	auto vec = listOfWords(teste);
+
+	for (auto i = vec.begin(); i != vec.end(); ++i) {
+		std::cout << "\"" << *i << "\"" << std::endl;
 	}
 
-	auto vec = avl.emOrdem();
+	return 0;
 
-	for (auto i = vec.begin(); i != vec.end(); ++i)
-		std::cout << *(*i)->getDado() << std::endl;
+	if (argc < 2) {
+		std::cout << "usage: " << argv[0] << " <init|search> [args]" << std::endl;
+		return 1;
+	}
 
-	avl.saveOnDisk("avltree.dat");
+	if (!strcmp(argv[1], "init")) {
+		init();
+		return 0;
+	}
+
+	if (!strcmp(argv[1], "search")) {
+
+	}
 }
 
-// int main(int argc, const char* argv[]) {
-// 	if (argc < 2) {
-// 		std::cout << "usage: " << argv[0] << " <init|search> [args]" << std::endl;
-// 		return 1;
-// 	}
+void search() {
 
-// 	if (strcmp(argv[1], "init") == 0) {
-// 		init();
-// 		return 0;
-// 	}
 
-// 	read();
+}
 
-// 	if (strcmp(argv[1], "search") == 0) {
 
-// 	}
-// }
 
-void init() {
-	auto files = ls(path);
+/*
+int main(int argc, const char* argv[]) {
 
-	std::ofstream output(manpagesfile, std::ios::out | std::ios::binary);
+	srand(time(NULL));
 
-	if (!output) {
-		throw std::runtime_error("Main::init: could not open file");
-	}
+	if (strcmp(argv[1], "write") == 0) {
 
-	Registro registro;
+		ArvoreAVL<int> avl;
 
-	for (auto i = files.begin(); i != files.end(); ++i) {
+		for (int i = 0; i < 10; ++i) {
+			avl.inserir(rand());
+		}
 
-		auto str = readwhole(std::string(path) + *i);
+		auto vec = avl.emOrdem();
 
-		strcpy(registro.comando, (*i).c_str());
-		strcpy(registro.conteudo, str.c_str());
+		std::cout << vec.size() << std::endl;
 
-		output.write((char*) &registro, sizeof(Registro));
+		for (auto i = vec.begin(); i != vec.end(); ++i)
+			std::cout << *(*i)->getDado() << " ";
+
+		std::cout << std::endl;
+
+		avl.saveOnDisk("avltree.dat");
+
+	} else {
+		ArvoreAVL<int> avl("avltree.dat");
+
+		std::cout << vec.size() << std::endl;
+
+		for (auto i = vec.begin(); i != vec.end(); ++i)
+			std::cout << *(*i)->getDado() << " ";
+
+		std::cout << std::endl;
+
 	}
 }
 
@@ -88,8 +112,8 @@ void read() {
 
 	}
 
-}
-
-void search() {
+	input.close();
 
 }
+
+*/

@@ -1,10 +1,10 @@
 all: build
 
 build:
-	@g++ -o Trabalho2 *.cpp -Wall -Wextra -pedantic -std=c++11 -g
+	@g++ -o mps *.cpp -Wall -Wextra -pedantic -std=c++11 -g
 
 run:
-	@./Trabalho2
+	@./mps
 
 clean:
-	@rm Trabalho2
+	@rm mps
