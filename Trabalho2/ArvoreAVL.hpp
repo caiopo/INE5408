@@ -55,8 +55,8 @@ class ArvoreAVL {
 		root = root->remover(root, dado);
 	}
 
-	T busca(T dado) {
-		return *root->busca(dado, root);
+	T* busca(T& dado) {
+		return root->busca(dado, root);
 	}
 
 	void saveOnDisk(const std::string filename) {

@@ -3,42 +3,42 @@
 
 #include <cstring>
 
-struct Registro {
+struct ManPage {
 	char comando[100];
 	char conteudo[140000];
 
-	bool operator<(const Registro& rhs) const {
+	inline bool operator<(const ManPage& rhs) const {
 		return strcmp(comando, rhs.comando) < 0;
 	}
 
-	bool operator>(const Registro& rhs) const {
+	inline bool operator>(const ManPage& rhs) const {
 		return strcmp(comando, rhs.comando) > 0;
 	}
 
-	bool operator==(const Registro& rhs) const {
+	inline bool operator==(const ManPage& rhs) const {
 		return strcmp(comando, rhs.comando) == 0;
 	}
 };
 
-struct ManpageEntry {
+struct ManPagePtr {
 	char comando[100];
-	std::streampos pos;
+	std::streampos pos = 0;
 
-	bool operator<(const ManpageEntry& rhs) const {
+	inline bool operator<(const ManPagePtr& rhs) const {
 		return strcmp(comando, rhs.comando) < 0;
 	}
 
-	bool operator>(const ManpageEntry& rhs) const {
+	inline bool operator>(const ManPagePtr& rhs) const {
 		return strcmp(comando, rhs.comando) > 0;
 	}
 
-	bool operator==(const ManpageEntry& rhs) const {
+	inline bool operator==(const ManPagePtr& rhs) const {
 		return strcmp(comando, rhs.comando) == 0;
 	}
 };
 
 struct Word {
-	char word[50];
+	char word[100];
 	unsigned int index = 0;
 	std::streampos pos[5650];
 
@@ -47,33 +47,37 @@ struct Word {
 		++index;
 	}
 
-	bool operator<(const Word& rhs) const {
+	inline bool operator<(const Word& rhs) const {
 		return strcmp(word, rhs.word) < 0;
 	}
 
-	bool operator>(const Word& rhs) const {
+	inline bool operator>(const Word& rhs) const {
 		return strcmp(word, rhs.word) > 0;
 	}
 
-	bool operator==(const Word& rhs) const {
+	inline bool operator==(const Word& rhs) const {
 		return strcmp(word, rhs.word) == 0;
 	}
 };
 
 struct WordPtr {
-	char word[50];
+	char word[100];
 	std::streampos pos = 0;
 
-	bool operator<(const WordPtr& rhs) const {
+	inline bool operator<(const WordPtr& rhs) const {
 		return strcmp(word, rhs.word) < 0;
 	}
 
-	bool operator>(const WordPtr& rhs) const {
+	inline bool operator>(const WordPtr& rhs) const {
 		return strcmp(word, rhs.word) > 0;
 	}
 
-	bool operator==(const WordPtr& rhs) const {
+	inline bool operator==(const WordPtr& rhs) const {
 		return strcmp(word, rhs.word) == 0;
+	}
+
+	inline bool operator!=(const WordPtr& rhs) const {
+		return !(*this == rhs);
 	}
 };
 

@@ -16,7 +16,7 @@ const std::vector<std::string> conectivos = {
 	"only", "always", "never", "all", "off", "with", "this"
 };
 
-const std::string SPECIAL_CHARS = " \n\r\t,.;\"'!@#$%%^&*()[]{}+-/<>?\\`~_:|0123456789";
+const std::string SPECIAL_CHARS = "\n\r\t,.;\"'!@#$%%^&*()[]{}+-/<>?\\`~_:|0123456789";
 
 std::string exec(const std::string cmd) {
 	char buffer[128];
@@ -114,8 +114,6 @@ std::set<std::string> listOfWords(std::string str) {
 	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 
 	replace_chars(str, SPECIAL_CHARS);
-
-	std::cout << "------------------------------\n" << str << std::endl << "------------------------------\n";
 
 	auto wordvec = split(str, " ");
 

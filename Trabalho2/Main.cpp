@@ -5,6 +5,36 @@
 #include <cstring>
 
 int main(int argc, const char* argv[]) {
+	// ArvoreAVL<WordPtr> wordtree;
+
+
+	// WordPtr a, b, c, d, e, f;
+
+	// strcpy(a.word, "a");
+	// strcpy(b.word, "b");
+	// strcpy(c.word, "c");
+	// strcpy(d.word, "d");
+	// strcpy(e.word, "e");
+	// strcpy(f.word, "f");
+
+	// wordtree.inserir(a);
+	// wordtree.inserir(b);
+	// wordtree.inserir(c);
+	// wordtree.inserir(d);
+	// wordtree.inserir(e);
+	// wordtree.inserir(f);
+
+	// WordPtr x;
+
+	// strcpy(x.word, "a");
+
+
+	// wordtree.busca(x);
+
+
+	// return 0;
+
+
 	if (argc < 2) {
 		std::cout << "usage: " << argv[0] << " <init|search> [args]" << std::endl;
 		return 1;

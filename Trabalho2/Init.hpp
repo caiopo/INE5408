@@ -1,5 +1,5 @@
-#ifndef INDEX_HPP
-#define INDEX_HPP
+#ifndef INIT_HPP
+#define INIT_HPP
 
 #include "Registro.hpp"
 #include "Utils.hpp"
@@ -15,13 +15,13 @@ const std::string INVERTED_INDEX = "InvertedIndex.dat";
 const std::string MANPAGES_TREE = "ManPages.tree";
 const std::string INDEX_TREE = "Index.tree";
 
-void addPageToIndex(WordPtr& wordptr, std::streampos pos) {
+void addPageToWord(WordPtr& wordptr, std::streampos pos) {
 	Word word;
 
 	std::ifstream input(INVERTED_INDEX, std::ios::in | std::ios::binary);
 
 	if (!input) {
-		throw std::runtime_error("Main::addPageToIndex: could not open input file");
+		throw std::runtime_error("Main::addPageToWord: could not open input file");
 	}
 
 	input.seekg(wordptr.pos);
@@ -32,10 +32,10 @@ void addPageToIndex(WordPtr& wordptr, std::streampos pos) {
 
 	word.add(pos);
 
-	std::ofstream output(INVERTED_INDEX, std::ios::out | std::ios::binary);
+	std::ofstream output(INVERTED_INDEX, std::ios::out | std::ios::in  | std::ios::binary);
 
 	if (!output) {
-		throw std::runtime_error("Main::addPageToIndex: could not open output file");
+		throw std::runtime_error("Main::addPageToWord: could not open output file");
 	}
 
 	output.seekp(wordptr.pos);
@@ -45,13 +45,11 @@ void addPageToIndex(WordPtr& wordptr, std::streampos pos) {
 	output.close();
 }
 
-
-std::streampos addNewWordToIndex(Word& word) {
-
+std::streampos addNewWord(Word& word) {
 	std::ofstream output(INVERTED_INDEX, std::ios::out | std::ios::app | std::ios::binary);
 
 	if (!output) {
-		throw std::runtime_error("Main::addPageToIndex: could not open output file");
+		throw std::runtime_error("Main::addNewWord: could not open output file");
 	}
 
 	auto pos = output.tellp();
@@ -67,45 +65,69 @@ std::streampos addNewWordToIndex(Word& word) {
 void generateInvertedIndex() {
 	ArvoreAVL<WordPtr> wordtree;
 
+	// create empty file
+	std::ofstream output(INVERTED_INDEX, std::ios::out | std::ios::binary);
+	output.close();
+
 	std::ifstream input(MANPAGES, std::ios::in | std::ios::binary);
 
  	if (!input) {
 		throw std::runtime_error("Main::generateInvertedIndex: could not open file");
 	}
 
-	Registro registro;
+	ManPage manpage;
 
 	std::streampos current_pos;
 
+	int count = 0;
+
 	while (input.good()) {
+		if ((count % 100) == 0)
+			std::cout << "Current manpage: " << count << std::endl;
+		++count;
 
 		current_pos = input.tellg();
 
-		input.read((char*) &registro, sizeof(Registro));
+		input.read((char*) &manpage, sizeof(ManPage));
 
-		auto wordset = listOfWords(registro.conteudo);
+		auto wordset = listOfWords(manpage.conteudo);
 
 		for (auto i = wordset.begin(); i != wordset.end(); ++i) {
 			WordPtr wordptr;
+			WordPtr* wordptrptr;
+			bool found = true;
 
 			strcpy(wordptr.word, (*i).c_str());
 
 			try {
-				wordtree.inserir(wordptr);
-			} catch (duplicate_entry_error<WordPtr&> err) {
-
+				wordptrptr = wordtree.busca(wordptr);
+			} catch (std::runtime_error& err) {
+				found = false;
 			}
 
-		}
+			if (found) {
+				addPageToWord(*wordptrptr, current_pos);
+			} else {
+				Word word;
+				strcpy(word.word, (*i).c_str());
+				word.add(current_pos);
 
+				wordptr.pos = addNewWord(word);
+
+				wordtree.inserir(wordptr);
+			}
+		}
 	}
 
 	input.close();
 
+	wordtree.saveOnDisk(INDEX_TREE);
 }
 
 void generateManpages() {
 	auto files = ls(PATH);
+
+	ArvoreAVL<ManPagePtr> mptree;
 
 	std::ofstream output(MANPAGES, std::ios::out | std::ios::binary);
 
@@ -113,24 +135,45 @@ void generateManpages() {
 		throw std::runtime_error("Main::generateManpagesDat: could not open file");
 	}
 
-	Registro registro;
+	ManPage mp;
+	ManPagePtr mpptr;
 
 	for (auto i = files.begin(); i != files.end(); ++i) {
 
 		auto str = readwhole(std::string(PATH) + *i);
 
-		strcpy(registro.comando, (*i).c_str());
-		strcpy(registro.conteudo, str.c_str());
+		auto comando = (*i).substr(0, (*i).find_last_of("."));
 
-		output.write((char*) &registro, sizeof(Registro));
+		strcpy(mp.comando, comando.c_str());
+		strcpy(mp.conteudo, str.c_str());
+
+		strcpy(mpptr.comando, (*i).c_str());
+
+		mpptr.pos = output.tellp();
+
+		// std::cout << mp.comando << std::endl;
+
+		mptree.inserir(mpptr);
+
+		output.write((char*) &mp, sizeof(ManPage));
 	}
 
 	output.close();
+
+	mptree.saveOnDisk(MANPAGES_TREE);
 }
 
 void init() {
+	std::cout << "Generating ManPages.dat" << std::endl;
+
 	generateManpages();
+
+	std::cout << "Finished ManPages.dat\n";
+	std::cout << "Generating InvertedIndex.dat" << std::endl;
+
 	generateInvertedIndex();
+
+	std::cout << "Finished InvertedIndex.dat\n";
 }
 
-#endif  // INDEX_HPP
+#endif  // INIT_HPP
