@@ -8,13 +8,13 @@
 /**
  * @brief      Imprime instrucoes de uso e termina o programa com erro
  *
- * @param[in]  argv  Nome do binario
+ * @param[in]  exename  Nome do binario
  */
-void usage(const char* argv) {
-	std::cout << "usage: " << argv << " <init|command|word> [args]" << std::endl;
-	std::cout << "init    - indexes the manpages"                   << std::endl;
-	std::cout << "command - search by command"                      << std::endl;
-	std::cout << "word    - search by word (case insensitive)"      << std::endl;
+void usage(const char* exename) {
+	std::cout << "usage: " << exename << " <init|command|word> [args]" << std::endl;
+	std::cout << "init    - indexes the manpages"                      << std::endl;
+	std::cout << "command - search by command"                         << std::endl;
+	std::cout << "word    - search by word (case insensitive)"         << std::endl;
 
 	exit(1);
 }
@@ -54,6 +54,24 @@ int main(int argc, const char* argv[]) {
 		}
 
 		Searcher::getInstance().byWord(strvec);
+		return 0;
+	}
+
+	if (!strcmp(argv[1], "word-disj")) {
+		std::vector<std::string> strvec;
+
+		int aux = 2;
+
+		while (aux < argc) {
+			strvec.push_back(argv[aux++]);
+		}
+
+		if (!strvec.size()) {
+			std::cout << "missing word(s)!" << std::endl << std::endl;
+			usage(argv[0]);
+		}
+
+		Searcher::getInstance().byWordDisjunctive(strvec);
 		return 0;
 	}
 

@@ -7,6 +7,8 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <set>
+
 
 /**
  * @brief      Imprime uma manpage de acordo com sua posicao
@@ -134,9 +136,13 @@ class Searcher {
 		#define GOTOS_CAN_BE_USEFUL
 		#ifdef GOTOS_CAN_BE_USEFUL
 
+
+		int nfound = 0;
+
 		start: for (auto i = posvec.begin(); i != posvec.end(); ++i) {
 			if (std::count(posvec.begin(), posvec.end(), *i) == unsigned(wordvec.size())) {
 				printFromManpages(*i);
+				++nfound;
 				posvec.erase(std::remove(posvec.begin(), posvec.end(), *i), posvec.end());
 				goto start;
 			}
@@ -153,13 +159,83 @@ class Searcher {
 					printFromManpages(*i);
 					posvec.erase(std::remove(posvec.begin(), posvec.end(), *i), posvec.end());
 					done = false;
+					++nfound;
 					break;
 				}
 			}
 		}
 
 		#endif
+
+		std::cout << nfound << " manpages found" << std::endl;
 	}
+
+	/**
+	 * @brief      Pesquisa por palavra de forma disjuntiva
+	 *
+	 * @param[in]  strvec  Palavras
+	 */
+	void byWordDisjunctive(std::vector<std::string> strvec) {
+		std::vector<WordPtr> wordptrvec;
+
+		for (auto i = strvec.begin(); i != strvec.end(); ++i) {
+			WordPtr wordptr;
+			WordPtr* wordptrptr;
+
+			std::transform(i->begin(), i->end(), i->begin(), ::tolower);
+
+			strcpy(wordptr.word, i->c_str());
+
+			try {
+
+				wordptrptr = wordtree.busca(wordptr);
+
+			} catch (std::runtime_error&) {
+				std::cout << "Word \"" << *i << "\" not found" << std::endl;
+				continue;
+			}
+
+			wordptrvec.push_back(*wordptrptr);
+		}
+
+		if (!wordptrvec.size()) {
+			std::cout << "0 manpages found" << std::endl;
+			return;
+		}
+
+		std::vector<Word> wordvec;
+		Word word;
+
+		std::ifstream input(INVERTED_INDEX, std::ios::in | std::ios::binary);
+
+		if (!input) {
+			throw std::runtime_error("Searcher::byWord: could not open input file");
+		}
+
+		for (auto i = wordptrvec.begin(); i != wordptrvec.end(); ++i) {
+			input.seekg(i->pos);
+
+			input.read((char*) &word, sizeof(Word));
+			wordvec.push_back(word);
+		}
+
+		input.close();
+
+		std::set<std::streampos> posset;
+
+		for (auto i = wordvec.begin(); i != wordvec.end(); ++i) {
+			for (unsigned int j = 0; j < i->index; ++j) {
+				posset.insert(i->pos[j]);
+			}
+		}
+
+		for (auto i = posset.begin(); i != posset.end(); ++i) {
+			printFromManpages(*i);
+		}
+
+		std::cout << posset.size() << " manpages found" << std::endl;
+	}
+
 };
 
 #endif  // SEARCH_HPP
