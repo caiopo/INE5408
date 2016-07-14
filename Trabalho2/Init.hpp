@@ -119,7 +119,7 @@ void generateInvertedIndex() {
 }
 
 void generateManpages() {
-	auto files = ls(PATH);
+	auto files = ls(PATH + "*.txt");
 
 	ArvoreAVL<ManPagePtr> mptree;
 
