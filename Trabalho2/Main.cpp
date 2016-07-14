@@ -5,6 +5,11 @@
 #include <iostream>
 #include <cstring>
 
+/**
+ * @brief      Prints usage and exits with error
+ *
+ * @param[in]  argv  Name of the binary
+ */
 void usage(const char* argv) {
 	std::cout << "usage: " << argv << " <init|command|word> [args]" << std::endl;
 	std::cout << "init    - indexes the manpages"                   << std::endl;
@@ -25,6 +30,11 @@ int main(int argc, const char* argv[]) {
 	}
 
 	if (!strcmp(argv[1], "command")) {
+		if (argc < 3) {
+			std::cout << "missing command!" << std::endl << std::endl;
+			usage(argv[0]);
+		}
+
 		Searcher::getInstance().byCommand(argv[2]);
 		return 0;
 	}
@@ -36,6 +46,11 @@ int main(int argc, const char* argv[]) {
 
 		while (aux < argc) {
 			strvec.push_back(argv[aux++]);
+		}
+
+		if (!strvec.size()) {
+			std::cout << "missing word(s)!" << std::endl << std::endl;
+			usage(argv[0]);
 		}
 
 		Searcher::getInstance().byWord(strvec);

@@ -6,6 +6,6 @@ build:
 clean:
 	rm mps
 	rm ManPages.dat
-	rm InvertedIndex.dat
 	rm ManPages.tree
+	rm InvertedIndex.dat
 	rm Index.tree
