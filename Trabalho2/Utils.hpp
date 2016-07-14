@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 std::string exec(const std::string cmd);
 
@@ -18,7 +19,7 @@ void replace_chars(std::string& str, const std::string& to_replace, const char b
 
 bool valid_word(std::string& str);
 
-std::vector<std::string> listOfWords(std::string str);
+std::set<std::string> listOfWords(std::string str);
 
 template < class ContainerT >
 void tokenize(const std::string& str, ContainerT& tokens,

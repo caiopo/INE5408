@@ -3,7 +3,22 @@
 #include <vector>
 #include <stdexcept>
 
-template <typename T>
+template<typename T>
+class duplicate_entry_error : public std::runtime_error {
+ private:
+		T& dupl;
+
+ public:
+	duplicate_entry_error(T& _dupl) :
+		std::runtime_error("NoAVL::inserir: inserting duplicate key"),
+		dupl{_dupl} {}
+
+	T& get() {
+		return dupl;
+	}
+};
+
+template<typename T>
 class NoAVL  {
  private:
 	int altura = 0;  //!< Representa a altura do nó AVL
@@ -56,7 +71,7 @@ class NoAVL  {
 		}
 
 		if (dado == *arv->dado) {
-			throw std::runtime_error("NoAVL::inserir: inserting duplicate key");
+			throw duplicate_entry_error<T>(*arv->dado);
 		} else if (dado < *arv->dado) {
 			arv->esquerda = inserir(dado, arv->esquerda);
 		} else {
@@ -237,6 +252,9 @@ private:
 
 		return altEsq - altDir;
 	}
+
+ public:
+
 };
 
 #endif /* NO_AVL_HPP */

@@ -16,7 +16,7 @@ const std::vector<std::string> conectivos = {
 	"only", "always", "never", "all", "off", "with", "this"
 };
 
-const std::string SPECIAL_CHARS = " \n\r\t,.;\"'!@#$%%^&*()[]{}+-/<>?\\`~_:";
+const std::string SPECIAL_CHARS = " \n\r\t,.;\"'!@#$%%^&*()[]{}+-/<>?\\`~_:|0123456789";
 
 std::string exec(const std::string cmd) {
 	char buffer[128];
@@ -108,8 +108,8 @@ bool valid_word(std::string& str) {
 	return !found && (str.size() > 2);
 }
 
-std::vector<std::string> listOfWords(std::string str) {
-	std::vector<std::string> valid;
+std::set<std::string> listOfWords(std::string str) {
+	std::set<std::string> valid;
 
 	std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 
@@ -121,9 +121,9 @@ std::vector<std::string> listOfWords(std::string str) {
 
 	for (auto i = wordvec.begin(); i != wordvec.end(); ++i) {
 		if (valid_word(*i)) {
-			valid.push_back(*i);
+			valid.insert(*i);
 		}
 	}
 
-	return wordvec;
+	return valid;
 }
