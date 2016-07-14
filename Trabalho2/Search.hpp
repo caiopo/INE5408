@@ -75,7 +75,6 @@ class Searcher {
 
 			std::transform(i->begin(), i->end(), i->begin(), ::tolower);
 
-
 			strcpy(wordptr.word, i->c_str());
 
 			try {
@@ -116,7 +115,8 @@ class Searcher {
 			}
 		}
 
-		#ifdef I_LIKE_GOTOS
+		#define GOTOS_CAN_BE_USEFUL
+		#ifdef GOTOS_CAN_BE_USEFUL
 
 		start: for (auto i = posvec.begin(); i != posvec.end(); ++i) {
 			if (std::count(posvec.begin(), posvec.end(), *i) == unsigned(wordvec.size())) {

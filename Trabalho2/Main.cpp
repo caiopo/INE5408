@@ -6,7 +6,11 @@
 #include <cstring>
 
 void usage(const char* argv) {
-	std::cout << "usage: " << argv << " <init|search> [args]" << std::endl;
+	std::cout << "usage: " << argv << " <init|command|word> [args]" << std::endl;
+	std::cout << "init    - indexes the manpages"                   << std::endl;
+	std::cout << "command - search by command"                      << std::endl;
+	std::cout << "word    - search by word (case insensitive)"      << std::endl;
+
 	exit(1);
 }
 
