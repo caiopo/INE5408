@@ -30,8 +30,8 @@ void printFromManpages(std::streampos pos) {
 
 	input.close();
 
-	std::cout << "Comando: " << mp.comando << std::endl << std::endl;
-	std::cout << "Conteudo: " << std::endl;
+	std::cout << "Comando: " << mp.comando << std::endl;
+	std::cout << std::endl  << "Conteudo: " << std::endl;
 	std::cout << mp.conteudo << std::endl;
 }
 

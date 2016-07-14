@@ -155,7 +155,9 @@ void generateManpages() {
 	for (auto i = files.begin(); i != files.end(); ++i) {
 		auto str = readwhole(*i);
 
-		auto comando = (*i).substr(0, (*i).find_last_of("."));
+		auto comando = i->substr(i->find_first_of("/")+1);
+
+		comando = comando.substr(0, comando.find_last_of("."));
 
 		strcpy(mp.comando, comando.c_str());
 		strcpy(mp.conteudo, str.c_str());
