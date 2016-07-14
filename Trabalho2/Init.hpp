@@ -133,8 +133,7 @@ void generateManpages() {
 	ManPagePtr mpptr;
 
 	for (auto i = files.begin(); i != files.end(); ++i) {
-
-		auto str = readwhole(std::string(PATH) + *i);
+		auto str = readwhole(*i);
 
 		auto comando = (*i).substr(0, (*i).find_last_of("."));
 
