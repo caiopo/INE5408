@@ -4,6 +4,30 @@
 #include "Paths.hpp"
 #include "ArvoreAVL.hpp"
 #include "Registro.hpp"
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+
+void printFromManpages(std::streampos pos) {
+	std::ifstream input(MANPAGES, std::ios::in | std::ios::binary);
+
+	if (!input) {
+		throw std::runtime_error("Search::printFromManpages: could not open input file");
+	}
+
+	input.seekg(pos);
+
+	ManPage mp;
+
+	input.read((char*) &mp, sizeof(ManPage));
+
+	input.close();
+
+	std::cout << mp.comando << std::endl << std::endl;
+	std::cout << mp.conteudo << std::endl;
+}
+
+
 
 class Searcher {
  private:
@@ -11,7 +35,7 @@ class Searcher {
 	ArvoreAVL<ManPagePtr> mptree{MANPAGES_TREE};
 
 	Searcher() = default;
-public:
+ public:
 	~Searcher() = default;
 	Searcher(Searcher const&) = delete;
 	void operator=(Searcher const&)  = delete;
@@ -37,26 +61,65 @@ public:
 			return;
 		}
 
-		std::ifstream input(MANPAGES, std::ios::in | std::ios::binary);
+		printFromManpages(mpptrptr->pos);
 
-		if (!input) {
-			throw std::runtime_error("Searcher::byCommand: could not open input file");
-		}
-
-		input.seekg(mpptrptr->pos);
-
-		ManPage mp;
-
-		input.read((char*) &mp, sizeof(ManPage));
-
-		input.close();
-
-		std::cout << mp.comando << std::endl;
-		std::cout << mp.conteudo << std::endl;
 	}
 
 	void byWord(std::vector<std::string> strvec) {
+		std::vector<WordPtr> wordptrvec;
 
+		for (auto i = strvec.begin(); i != strvec.end(); ++i) {
+			WordPtr wordptr;
+			WordPtr* wordptrptr;
+
+			strcpy(wordptr.word, i->c_str());
+
+			try {
+
+				wordptrptr = wordtree.busca(wordptr);
+
+			} catch (std::runtime_error&) {
+				std::cout << "Word " << *i << " not found" << std::endl;
+				return;
+			}
+
+			wordptrvec.push_back(*wordptrptr);
+		}
+
+		std::vector<Word> wordvec;
+		Word word;
+
+		std::ifstream input(INVERTED_INDEX, std::ios::in | std::ios::binary);
+
+		if (!input) {
+			throw std::runtime_error("Searcher::byWord: could not open input file");
+		}
+
+		for (auto i = wordptrvec.begin(); i != wordptrvec.end(); ++i) {
+			input.seekg(i->pos);
+
+			input.read((char*) &word, sizeof(Word));
+			wordvec.push_back(word);
+		}
+
+		input.close();
+
+		std::vector<std::streampos> posvec;
+
+		for (auto i = wordvec.begin(); i != wordvec.end(); ++i) {
+
+			for (unsigned int j = 0; j < i->index; ++j) {
+				posvec.push_back(i->pos[j]);
+			}
+		}
+
+		for (auto i = posvec.begin(); i != posvec.end(); ++i) {
+			if (std::count(posvec.begin(), posvec.end(), *i) == unsigned(wordvec.size())) {
+				printFromManpages(*i);
+				posvec.erase(std::remove(posvec.begin(), posvec.end(), *i), posvec.end());
+				i = posvec.begin();
+			}
+		}
 	}
 };
 

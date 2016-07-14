@@ -141,11 +141,9 @@ void generateManpages() {
 		strcpy(mp.comando, comando.c_str());
 		strcpy(mp.conteudo, str.c_str());
 
-		strcpy(mpptr.comando, (*i).c_str());
+		strcpy(mpptr.comando, comando.c_str());
 
 		mpptr.pos = output.tellp();
-
-		// std::cout << mp.comando << std::endl;
 
 		mptree.inserir(mpptr);
 

@@ -25,10 +25,20 @@ int main(int argc, const char* argv[]) {
 		return 0;
 	}
 
-	if (!strcmp(argv[1], "term")) {
-		// std::vector<std::string> strvec;
+	if (!strcmp(argv[1], "word")) {
+		std::vector<std::string> strvec;
 
-		// Searcher::getInstance().byWords(argv[2]);
+		int aux = 2;
+
+		while (aux < argc) {
+			strvec.push_back(argv[aux++]);
+		}
+
+		for (auto i = strvec.begin(); i != strvec.end(); ++i) {
+			std::cout << *i << std::endl;
+		}
+
+		Searcher::getInstance().byWord(strvec);
 		return 0;
 	}
 
