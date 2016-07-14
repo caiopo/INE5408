@@ -3,7 +3,7 @@
 
 #include "Paths.hpp"
 #include "ArvoreAVL.hpp"
-#include "Registro.hpp"
+#include "Structs.hpp"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
@@ -58,7 +58,7 @@ class Searcher {
 			mpptrptr = mptree.busca(mpptr);
 
 		} catch (std::runtime_error&) {
-			std::cout << "Command not found" << std::endl;
+			std::cout << "Command \"" << str << "\"not found" << std::endl;
 			return;
 		}
 
@@ -72,6 +72,9 @@ class Searcher {
 		for (auto i = strvec.begin(); i != strvec.end(); ++i) {
 			WordPtr wordptr;
 			WordPtr* wordptrptr;
+
+			std::transform(i->begin(), i->end(), i->begin(), ::tolower);
+
 
 			strcpy(wordptr.word, i->c_str());
 
@@ -113,6 +116,8 @@ class Searcher {
 			}
 		}
 
+		#ifdef I_LIKE_GOTOS
+
 		start: for (auto i = posvec.begin(); i != posvec.end(); ++i) {
 			if (std::count(posvec.begin(), posvec.end(), *i) == unsigned(wordvec.size())) {
 				printFromManpages(*i);
@@ -120,6 +125,24 @@ class Searcher {
 				goto start;
 			}
 		}
+
+		#else
+
+		bool done = false;
+
+		while (!done) {
+			done = true;
+			for (auto i = posvec.begin(); i != posvec.end(); ++i) {
+				if (std::count(posvec.begin(), posvec.end(), *i) == unsigned(wordvec.size())) {
+					printFromManpages(*i);
+					posvec.erase(std::remove(posvec.begin(), posvec.end(), *i), posvec.end());
+					done = false;
+					break;
+				}
+			}
+		}
+
+		#endif
 	}
 };
 

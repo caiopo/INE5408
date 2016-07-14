@@ -89,21 +89,10 @@ void replace_chars(std::string& str, const std::string& to_replace, const char b
 	for (auto i = to_replace.begin(); i != to_replace.end(); ++i) {
 		std::replace(str.begin(), str.end(), *i, by);
 	}
-
-
 }
 
 bool valid_word(std::string& str) {
-	// auto found = find(conectivos.begin(), conectivos.end(), str) != conectivos.end();
-
-	bool found = false;
-
-	for (auto i = conectivos.begin(); i != conectivos.end(); ++i) {
-		if (*i == str) {
-			found = true;
-			break;
-		}
-	}
+	auto found = find(conectivos.begin(), conectivos.end(), str) != conectivos.end();
 
 	return !found && (str.size() > 2);
 }

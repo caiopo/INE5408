@@ -1,7 +1,7 @@
 #ifndef INIT_HPP
 #define INIT_HPP
 
-#include "Registro.hpp"
+#include "Structs.hpp"
 #include "Utils.hpp"
 #include "NoAVL.hpp"
 #include "ArvoreAVL.hpp"

@@ -1,7 +1,7 @@
 all: build
 
 build:
-	g++ -o mps *.cpp -Wall -Wextra -pedantic -std=c++11 -O2 #fast -march=native -unroll-loops
+	g++ -o mps *.cpp -Wall -Wextra -pedantic -Werror -std=c++11 -Ofast -march=native
 
 clean:
 	rm mps
