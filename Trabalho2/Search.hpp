@@ -125,47 +125,36 @@ class Searcher {
 
 		input.close();
 
-		std::vector<std::streampos> posvec;
-
-		for (auto i = wordvec.begin(); i != wordvec.end(); ++i) {
-			for (unsigned int j = 0; j < i->index; ++j) {
-				posvec.push_back(i->pos[j]);
-			}
-		}
-
-		#define GOTOS_CAN_BE_USEFUL
-		#ifdef GOTOS_CAN_BE_USEFUL
-
-
 		int nfound = 0;
 
-		start: for (auto i = posvec.begin(); i != posvec.end(); ++i) {
-			if (std::count(posvec.begin(), posvec.end(), *i) == unsigned(wordvec.size())) {
-				printFromManpages(*i);
-				++nfound;
-				posvec.erase(std::remove(posvec.begin(), posvec.end(), *i), posvec.end());
-				goto start;
+		if (wordvec.size() == 2) {
+			for (unsigned int i = 0; i < wordvec[0].index ; ++i) {
+				for (unsigned int j = 0; j < wordvec[1].index ; ++j) {
+					if (wordvec[0].pos[i] == wordvec[1].pos[j]) {
+						printFromManpages(wordvec[0].pos[i]);
+						++nfound;
+					}
+				}
 			}
-		}
 
-		#else
+		} else {
+			std::vector<std::streampos> posvec;
 
-		bool done = false;
+			for (auto i = wordvec.begin(); i != wordvec.end(); ++i) {
+				for (unsigned int j = 0; j < i->index; ++j) {
+					posvec.push_back(i->pos[j]);
+				}
+			}
 
-		while (!done) {
-			done = true;
-			for (auto i = posvec.begin(); i != posvec.end(); ++i) {
+			start: for (auto i = posvec.begin(); i != posvec.end(); ++i) {
 				if (std::count(posvec.begin(), posvec.end(), *i) == unsigned(wordvec.size())) {
 					printFromManpages(*i);
-					posvec.erase(std::remove(posvec.begin(), posvec.end(), *i), posvec.end());
-					done = false;
 					++nfound;
-					break;
+					posvec.erase(std::remove(posvec.begin(), posvec.end(), *i), posvec.end());
+					goto start;
 				}
 			}
 		}
-
-		#endif
 
 		std::cout << nfound << " manpages found" << std::endl;
 	}
