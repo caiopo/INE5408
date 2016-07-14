@@ -15,7 +15,7 @@
  *
  * @param[in]  pos   A posicao da manpage
  */
-void printFromManpages(std::streampos pos) {
+void printFromManpages(std::streampos pos, bool printContent = false) {
 	std::ifstream input(MANPAGES, std::ios::in | std::ios::binary);
 
 	if (!input) {
@@ -31,8 +31,11 @@ void printFromManpages(std::streampos pos) {
 	input.close();
 
 	std::cout << "Comando: " << mp.comando << std::endl;
-	std::cout << std::endl  << "Conteudo: " << std::endl;
-	std::cout << mp.conteudo << std::endl;
+
+	if (printContent) {
+		std::cout << std::endl  << "Conteudo: " << std::endl;
+		std::cout << mp.conteudo << std::endl;
+	}
 }
 
 /**
@@ -75,7 +78,7 @@ class Searcher {
 			return;
 		}
 
-		printFromManpages(mpptrptr->pos);
+		printFromManpages(mpptrptr->pos, true);
 
 	}
 
