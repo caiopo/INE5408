@@ -6,9 +6,9 @@
 #include <cstring>
 
 /**
- * @brief      Prints usage and exits with error
+ * @brief      Imprime instrucoes de uso e termina o programa com erro
  *
- * @param[in]  argv  Name of the binary
+ * @param[in]  argv  Nome do binario
  */
 void usage(const char* argv) {
 	std::cout << "usage: " << argv << " <init|command|word> [args]" << std::endl;

@@ -35,22 +35,6 @@ std::string exec(const std::string cmd) {
 	return result;
 }
 
-void cat(const std::string filename) {
-	std::ifstream input(filename, std::ios::in | std::ios::binary);
-
-	std::string line;
-
-	if (!input) {
-		throw std::runtime_error("Utils::cat: could not open file");
-	}
-
-	while (getline(input, line)) {
-		std::cout << line << '\n';
-	}
-
-	input.close();
-}
-
 std::string readwhole(const std::string filename) {
 	std::ifstream input(filename, std::ios::in | std::ios::binary);
 

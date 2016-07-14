@@ -10,6 +10,13 @@
 #include <set>
 #include <cstring>
 
+/**
+ * @brief      Adiciona uma nova posicao a uma palavra já existente no arquivo
+ *             invertido
+ *
+ * @param      wordptr  Posicao da palavra no arquivo invertido
+ * @param[in]  pos      Posicao para adicionar na palavra
+ */
 void addPageToWord(WordPtr& wordptr, std::streampos pos) {
 	Word word;
 
@@ -40,6 +47,13 @@ void addPageToWord(WordPtr& wordptr, std::streampos pos) {
 	output.close();
 }
 
+/**
+ * @brief      Adiciona uma nova palavra ao arquivo invertido
+ *
+ * @param      word  Palavra a ser adicionada
+ *
+ * @return     Posicao que a palavra foi inserida
+ */
 std::streampos addNewWord(Word& word) {
 	std::ofstream output(INVERTED_INDEX, std::ios::out | std::ios::app | std::ios::binary);
 
@@ -56,6 +70,9 @@ std::streampos addNewWord(Word& word) {
 	return pos;
 }
 
+/**
+ * @brief      Gera e indexa o arquivo invertido
+ */
 void generateInvertedIndex() {
 	ArvoreAVL<WordPtr> wordtree;
 
@@ -118,6 +135,9 @@ void generateInvertedIndex() {
 	wordtree.saveOnDisk(INDEX_TREE);
 }
 
+/**
+ * @brief      Gera e indexa o ManPages.dat
+ */
 void generateManpages() {
 	auto files = ls(PATH + "*.txt");
 

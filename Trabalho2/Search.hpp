@@ -8,6 +8,11 @@
 #include <iostream>
 #include <algorithm>
 
+/**
+ * @brief      Imprime uma manpage de acordo com sua posicao
+ *
+ * @param[in]  pos   A posicao da manpage
+ */
 void printFromManpages(std::streampos pos) {
 	std::ifstream input(MANPAGES, std::ios::in | std::ios::binary);
 
@@ -28,12 +33,13 @@ void printFromManpages(std::streampos pos) {
 	std::cout << mp.conteudo << std::endl;
 }
 
-
-
+/**
+ * @brief      Singleton que serve pra pesquisar palavras e comandos
+ */
 class Searcher {
  private:
-	ArvoreAVL<WordPtr> wordtree{INDEX_TREE};
-	ArvoreAVL<ManPagePtr> mptree{MANPAGES_TREE};
+	ArvoreAVL<WordPtr> wordtree{INDEX_TREE};      //! Arvore de WordPtr
+	ArvoreAVL<ManPagePtr> mptree{MANPAGES_TREE};  //! Arvore de ManPagePtr
 
 	Searcher() = default;
  public:
@@ -47,6 +53,11 @@ class Searcher {
 		return instance;
 	}
 
+	/**
+	 * @brief      Pesquisa por comando
+	 *
+	 * @param[in]  str   Comando
+	 */
 	void byCommand(std::string str) {
 		ManPagePtr mpptr;
 		ManPagePtr* mpptrptr;
@@ -66,6 +77,11 @@ class Searcher {
 
 	}
 
+	/**
+	 * @brief      Pesquisa por palavra
+	 *
+	 * @param[in]  strvec  Palavras
+	 */
 	void byWord(std::vector<std::string> strvec) {
 		std::vector<WordPtr> wordptrvec;
 

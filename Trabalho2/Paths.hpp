@@ -1,6 +1,11 @@
 #ifndef PATHS_HPP
 #define PATHS_HPP
 
+
+/**
+ * @brief      Constantes
+ */
+
 const std::string PATH = "ManPages/";
 const std::string MANPAGES = "ManPages.dat";
 const std::string INVERTED_INDEX = "InvertedIndex.dat";
