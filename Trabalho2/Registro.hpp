@@ -18,6 +18,10 @@ struct ManPage {
 	inline bool operator==(const ManPage& rhs) const {
 		return strcmp(comando, rhs.comando) == 0;
 	}
+
+	inline bool operator!=(const ManPage& rhs) const {
+		return !(*this == rhs);
+	}
 };
 
 struct ManPagePtr {
@@ -34,6 +38,10 @@ struct ManPagePtr {
 
 	inline bool operator==(const ManPagePtr& rhs) const {
 		return strcmp(comando, rhs.comando) == 0;
+	}
+
+	inline bool operator!=(const ManPagePtr& rhs) const {
+		return !(*this == rhs);
 	}
 };
 
@@ -57,6 +65,10 @@ struct Word {
 
 	inline bool operator==(const Word& rhs) const {
 		return strcmp(word, rhs.word) == 0;
+	}
+
+	inline bool operator!=(const Word& rhs) const {
+		return !(*this == rhs);
 	}
 };
 

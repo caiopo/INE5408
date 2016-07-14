@@ -5,15 +5,10 @@
 #include "Utils.hpp"
 #include "NoAVL.hpp"
 #include "ArvoreAVL.hpp"
+#include "Paths.hpp"
 #include <fstream>
 #include <set>
 #include <cstring>
-
-const std::string PATH = "ManPages/";
-const std::string MANPAGES = "ManPages.dat";
-const std::string INVERTED_INDEX = "InvertedIndex.dat";
-const std::string MANPAGES_TREE = "ManPages.tree";
-const std::string INDEX_TREE = "Index.tree";
 
 void addPageToWord(WordPtr& wordptr, std::streampos pos) {
 	Word word;
@@ -21,7 +16,7 @@ void addPageToWord(WordPtr& wordptr, std::streampos pos) {
 	std::ifstream input(INVERTED_INDEX, std::ios::in | std::ios::binary);
 
 	if (!input) {
-		throw std::runtime_error("Main::addPageToWord: could not open input file");
+		throw std::runtime_error("Init::addPageToWord: could not open input file");
 	}
 
 	input.seekg(wordptr.pos);
@@ -35,7 +30,7 @@ void addPageToWord(WordPtr& wordptr, std::streampos pos) {
 	std::ofstream output(INVERTED_INDEX, std::ios::out | std::ios::in  | std::ios::binary);
 
 	if (!output) {
-		throw std::runtime_error("Main::addPageToWord: could not open output file");
+		throw std::runtime_error("Init::addPageToWord: could not open output file");
 	}
 
 	output.seekp(wordptr.pos);
@@ -49,7 +44,7 @@ std::streampos addNewWord(Word& word) {
 	std::ofstream output(INVERTED_INDEX, std::ios::out | std::ios::app | std::ios::binary);
 
 	if (!output) {
-		throw std::runtime_error("Main::addNewWord: could not open output file");
+		throw std::runtime_error("Init::addNewWord: could not open output file");
 	}
 
 	auto pos = output.tellp();
@@ -61,7 +56,6 @@ std::streampos addNewWord(Word& word) {
 	return pos;
 }
 
-
 void generateInvertedIndex() {
 	ArvoreAVL<WordPtr> wordtree;
 
@@ -72,7 +66,7 @@ void generateInvertedIndex() {
 	std::ifstream input(MANPAGES, std::ios::in | std::ios::binary);
 
  	if (!input) {
-		throw std::runtime_error("Main::generateInvertedIndex: could not open file");
+		throw std::runtime_error("Init::generateInvertedIndex: could not open file");
 	}
 
 	ManPage manpage;
@@ -132,7 +126,7 @@ void generateManpages() {
 	std::ofstream output(MANPAGES, std::ios::out | std::ios::binary);
 
 	if (!output) {
-		throw std::runtime_error("Main::generateManpagesDat: could not open file");
+		throw std::runtime_error("Init::generateManpages: could not open file");
 	}
 
 	ManPage mp;
