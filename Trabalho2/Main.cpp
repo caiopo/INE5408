@@ -34,10 +34,6 @@ int main(int argc, const char* argv[]) {
 			strvec.push_back(argv[aux++]);
 		}
 
-		for (auto i = strvec.begin(); i != strvec.end(); ++i) {
-			std::cout << *i << std::endl;
-		}
-
 		Searcher::getInstance().byWord(strvec);
 		return 0;
 	}

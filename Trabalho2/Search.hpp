@@ -23,7 +23,8 @@ void printFromManpages(std::streampos pos) {
 
 	input.close();
 
-	std::cout << mp.comando << std::endl << std::endl;
+	std::cout << "Comando: " << mp.comando << std::endl << std::endl;
+	std::cout << "Conteudo: " << std::endl;
 	std::cout << mp.conteudo << std::endl;
 }
 
@@ -79,7 +80,7 @@ class Searcher {
 				wordptrptr = wordtree.busca(wordptr);
 
 			} catch (std::runtime_error&) {
-				std::cout << "Word " << *i << " not found" << std::endl;
+				std::cout << "Word \"" << *i << "\" not found" << std::endl;
 				return;
 			}
 
@@ -107,17 +108,16 @@ class Searcher {
 		std::vector<std::streampos> posvec;
 
 		for (auto i = wordvec.begin(); i != wordvec.end(); ++i) {
-
 			for (unsigned int j = 0; j < i->index; ++j) {
 				posvec.push_back(i->pos[j]);
 			}
 		}
 
-		for (auto i = posvec.begin(); i != posvec.end(); ++i) {
+		start: for (auto i = posvec.begin(); i != posvec.end(); ++i) {
 			if (std::count(posvec.begin(), posvec.end(), *i) == unsigned(wordvec.size())) {
 				printFromManpages(*i);
 				posvec.erase(std::remove(posvec.begin(), posvec.end(), *i), posvec.end());
-				i = posvec.begin();
+				goto start;
 			}
 		}
 	}
