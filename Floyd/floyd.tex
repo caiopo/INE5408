@@ -1,0 +1,113 @@
+%This is a LaTeX template for homework assignments
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\usepackage[top=1in, bottom=1in]{geometry}
+
+\newcommand{\subscript}[1]{$_{\text{#1}}$}
+
+\title{Análise da complexidade do Algoritmo de Floyd Modificado}
+\author{Caio Pereira Oliveira}
+\date{10 de maio de 2016}
+
+\begin{document}
+
+\maketitle
+
+\section*{Apresentação do algoritmo}
+
+Considere a matriz de custos D[n,n] definida como no
+algoritmo de Floyd. o algoritmo produzirá uma matriz A[n,n], com
+comprimentos dos menores caminhos e ainda uma matriz R[n,n] que fornece o vértice k, que é o primeiro vértice a ser visitado no menor caminho de v\subscript{i} até v\subscript{j}.
+
+\begin{verbatim}
+INÍCIO
+Para i = 1 até n faça
+    Para j = 1 ate n faça
+        A[i,j] <- D[i,j]
+        R[i,j] <- 0
+Para i = 1 até n faça
+    A[i,j] <- 0
+Para k = 1 até n faça
+    Para i = 1 até n faça
+        Para j = 1 até n faça
+            Se A[i,k] + A[k,j] < A[i,j] então faça
+                A[i,j] = A[i,k] + A[k,j]
+                R[i,j] <- k
+FIM
+\end{verbatim}
+
+\newpage
+
+\section*{Análise da complexidade}
+\subsection*{Primeiro para-faça}
+\begin{verbatim}
+Para i = 1 até n faça
+    Para j = 1 ate n faça
+        A[i,j] <- D[i,j]
+        R[i,j] <- 0
+\end{verbatim}
+
+Analisando de dentro para fora sabemos que:
+
+\begin{itemize}
+    \item O custo conteúdo do para-faça interno é $2$, porque são feitas duas atribuições.
+    
+    \item O para-faça interno possui um custo de $1$ para a inicialização da variável $j$, $n$ para o número de incrementos em $j$ que serão feitos e $n+1$ para os testes. Além disso, todo o seu conteúdo também será repetido $n$ vezes, o que adiciona $2n$ unidades de tempo, resultando em um custo de $1 + n + n+1 + 2n$ que pode ser simplificado para $4n+2$.
+    
+    \item O para-faça externo possui um custo de $1$ para inicialização da variável $i$, $n$ para o número de incrementos em $i$ que serão feitos e $n+1$ para os testes. Além disso, todo o seu conteúdo também será repetido $n$ vezes, o que adiciona $n*(4n+2)$ unidades de tempo, resultando em um custo de $1 + n + n+1 + n*(4n+2)$ que pode ser simplificado para $4n^2+4n+2$.
+\end{itemize}
+Logo, o custo total do primeiro para-faça é $4n^2+4n+2$.
+
+\subsection*{Segundo para-faça}
+\begin{verbatim}
+Para i = 1 até n faça
+    A[i,i] <- 0
+\end{verbatim}
+
+Analisando de dentro para fora sabemos que:
+
+\begin{itemize}
+    \item O custo do conteúdo do para-faça é $1$, porque é feita uma atribuição.
+    
+    \item O para-faça possui um custo de $1$ para inicialização da variável $i$, $n$ para o número de incrementos em $i$ que serão feitos e $n+1$ para os testes. Além disso, todo o seu conteúdo também será repetido $n$ vezes, o que adiciona $n$ unidades de tempo, resultando em um custo de $1 + n + n+1 + n$ que pode ser simplificado para $3n+2$.
+\end{itemize}
+Logo, o custo total do segundo para-faça é $3n+2$.
+
+\newpage
+
+\subsection*{Terceiro para-faça}
+\begin{verbatim}
+Para k = 1 até n faça
+    Para i = 1 até n faça
+        Para j = 1 até n faça
+            Se A[i,k] + A[k,j] < A[i,j] então faça
+                A[i,j] = A[i,k] + A[k,j]
+                R[i,j] <- k
+\end{verbatim}
+
+Analisando de dentro para fora sabemos que:
+
+\begin{itemize}
+    \item O custo do conteúdo do teste é $3$, porque são feitas duas atribuições e uma soma.
+    
+    \item O curso do teste é $2$, porque tem uma adição e uma comparação. Somando com o interior do teste, temos um curso de $5$.
+    
+    \item O para-faça interno possui um custo de $1$ para inicialização da variável $j$, $n$ para o número de incrementos em $j$ que serão feitos e $n+1$ para os testes. Além disso, todo o seu conteúdo também será repetido $n$ vezes, o que adiciona $5n$ unidades de tempo, resultando em um custo de $1+n+n+1+5n$, que pode ser simplificado para $7n+2$.
+    
+    \item O para-faça intermediário possui um custo de $1$ para inicialização da variável $i$, $n$ para o número de incrementos em $i$ que serão feitos e $n+1$ para os testes. Além disso, todo o seu conteúdo também será repetido $n$ vezes, o que adiciona $n*(7n+2)$ unidades de tempo, resultando em um custo de $1+n+n+1+n*(7n+2)$, que pode ser simplificado para $7n^2+4n+2$.
+    
+    \item O para-faça externo possui um custo de $1$ para inicialização da variável $k$, $n$ para o número de incrementos em $k$ que serão feitos e $n+1$ para os testes. Além disso, todo o seu conteúdo também será repetido $n$ vezes, o que adiciona $n*(7n^2+4n+2)$ unidades de tempo, resultando em um custo de $1+n+n+1+n*(7n^2+4n+2)$, que pode ser simplificado para $7n^3 + 4n^2 + 4n + 2$.
+\end{itemize}
+Logo, o custo total do terceiro para-faça é $7n^3 + 4n^2 + 4n + 2$.
+
+\subsection*{Conclusão}
+
+Após somar o custo dos três para-faça, temos o custo total $7n^3 + 8n^2 + 11n + 6$.\\\\
+Analisando o comportamento assintótico desta função, podemos observar que apenar o $n^3$ é predominante para determinar a complexidade do algoritmo.\\\\
+Portanto, a complexidade do Algoritmo de Floyd Modificado é $\mathcal{O}(n^3)$
+
+
+\end{document}
